@@ -1,8 +1,17 @@
-<div class="row">
+<div class="row" id="article-list">
   <div class="col-xs-12">
     <h1>Reservations</h1>
-    <calendar date="vm.date" data="vm.reservations"></calendar>
-    <table class="table table-striped">
+    <ul class="nav nav-pills center switch">
+      <li ng-class="{'active': vm.visualization === 'calendar'}"><a ng-click="vm.switchVisualization('calendar')">Calendar</a></li>
+      <li ng-class="{'active': vm.visualization === 'table'}"><a ng-click="vm.switchVisualization('table')">Table</a></li>
+    </ul>
+    <div class="row picker">
+      <div class="col-md-4 -col-xs-12"><button class="btn btn-primary pull-left" ng-click="vm.next()">Next</button></div>
+      <div class="col-md-4 -col-xs-12"><input type="month" ng-change="vm.getReservationList()" ng-model="vm.date" class="center text-center form-control" /></div>
+      <div class="col-md-4 -col-xs-12"><button class="btn btn-primary pull-right" ng-click="vm.prev()">Prev</button></div>
+    </div>
+    <calendar ng-if="vm.visualization === 'calendar'" date="vm.date" data="vm.reservations"></calendar>
+    <table ng-if="vm.visualization === 'table'" class="table table-striped">
       <thead>
         <tr>
           <th></th>

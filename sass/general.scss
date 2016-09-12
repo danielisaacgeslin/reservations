@@ -9,6 +9,22 @@ textarea {
   resize: vertical;
 }
 
+.center {
+  display:block;
+  margin:auto;
+}
+
+#article-list {
+  .picker {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  .switch {
+    width:160px;
+    margin: 15px auto;
+  }
+}
+
 #article {
   ul {
     margin:0;

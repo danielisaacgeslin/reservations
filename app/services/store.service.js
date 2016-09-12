@@ -42,9 +42,9 @@
       return defer.promise;
     }
 
-    function getReservationList(){
+    function getReservationList(month, year){
       var defer = $q.defer();
-      ajaxService.getReservationList().then(function(response){
+      ajaxService.getReservationList(month, year).then(function(response){
         /*keeping old reservations as they were stored*/
         reservations = Object.assign(processService.dbArrayAdapter(response.data.payload), reservations);
         defer.resolve(reservations);

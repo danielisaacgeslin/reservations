@@ -16,7 +16,6 @@
     };
 
     function link($scope){
-      console.log($scope);
 			$scope.days = [];
 
 			$scope.$watch('data', _updateCalendar);

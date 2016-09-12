@@ -36,7 +36,7 @@
             break;
         case 'getReservationList':
             $reservationList = new ReservationList();
-            $result = $reservationList -> getReservationList();
+            $result = $reservationList -> getReservationList($_GET['month'], $_GET['year']);
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
         case 'saveComment':

@@ -38,8 +38,8 @@
 		}
 
 		/*N/A*/
-		function getReservationList(){
-			return $http.get(url.concat('?route=getReservationList'));
+		function getReservationList(month, year){
+			return $http.get(url.concat('?route=getReservationList&month=').concat(month).concat('&year=').concat(year));
 		}
 
 		/*reservation_id(int)*/
