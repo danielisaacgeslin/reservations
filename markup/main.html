@@ -7,8 +7,8 @@
     </ul>
     <div class="row picker">
       <div class="col-md-4 -col-xs-12"><button class="btn btn-primary pull-left" ng-click="vm.next()">Next</button></div>
-      <div class="col-md-4 -col-xs-12"><input type="month" ng-change="vm.getReservationList()" ng-model="vm.date" class="center text-center form-control" /></div>
-      <div class="col-md-4 -col-xs-12"><button class="btn btn-primary pull-right" ng-click="vm.prev()">Prev</button></div>
+      <div class="col-md-4 -col-xs-12"><input type="month" value="{{vm.date | date: 'yyyy-MM'}}" class="center text-center form-control" /></div>
+      <div class="col-md-4 -col-xs-12"><button class="btn btn-primary pull-right" ng-click="vm.prev(vm.date)">Prev</button></div>
     </div>
     <calendar ng-if="vm.visualization === 'calendar'" date="vm.date" data="vm.reservations"></calendar>
     <table ng-if="vm.visualization === 'table'" class="table table-striped">

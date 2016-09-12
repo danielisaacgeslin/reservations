@@ -47,7 +47,7 @@
 			_getReservationList();
 		}
 
-		function prev(){
+		function prev(asd){
 			vm.date.setMonth(vm.date.getMonth() - 1);
 			_getReservationList();
 		}
