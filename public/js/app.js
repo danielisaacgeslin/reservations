@@ -71,6 +71,7 @@
 
 	function mainController($scope, storeService) {
 		var vm = this;
+		vm.date = new Date();
 		vm.reservations = {};
 
 		vm.deleteReservation = deleteReservation;
@@ -290,13 +291,50 @@
       templateUrl: 'calendar.directive.html',
       link: link,
       scope: {
-          data: '='
+          data: '=',
+					date: '='
       }
     };
 
     function link($scope){
       console.log($scope);
+			$scope.days = [];
+
+			$scope.$watch('data', _updateCalendar);
+
       /*private functions*/
+			function _updateCalendar(){
+				var month = $scope.date.getMonth();
+				var year = $scope.date.getFullYear();
+				var days = _getDaysInMonth(month, year);
+
+				days = days.map(function(day){
+					day.items = [];
+					day.empty = true;
+					for(var item in $scope.data){
+						if(_compareDates(day.date, $scope.data[item].date)){
+							day.items.push($scope.data[item]);
+							day.empty = false;
+						}
+					}
+					return day;
+				});
+				$scope.days = days;
+			}
+
+			function _getDaysInMonth(month, year) {
+				var date = new Date(year, month, 1);
+				var days = [];
+				while (date.getMonth() === month) {
+					days.push({date: new Date(date)});
+					date.setDate(date.getDate() + 1);
+				}
+				return days;
+			}
+
+			function _compareDates(date1, date2){
+				return date1.getTime() === date2.getTime();
+			}
       /*end private functions*/
 
       /*public functions*/
@@ -306,6 +344,46 @@
 })();
 
 },{}],7:[function(require,module,exports){
+(function(){
+	'use strict';
+	angular.module('app').filter('department', departmentFilter);
+
+	function departmentFilter() {
+		return function(input){
+      var output;
+			input = String(input);
+      switch(input){
+        case '1':
+          output = 'A';
+          break;
+        case '2':
+          output = 'B';
+          break;
+        case '3':
+          output = 'C';
+          break;
+				case '4':
+          output = 'D';
+          break;
+				case '5':
+          output = 'E';
+          break;
+				case '6':
+          output = 'F';
+          break;
+				case '7':
+          output = 'G';
+          break;
+        default:
+          output = 'invalid time';
+          break;
+      }
+      return output;
+    }
+	}
+})();
+
+},{}],8:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').filter('time', timeFilter);
@@ -333,26 +411,27 @@
 	}
 })();
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 require('./modules/app.module');
 require('./config');
 require('./services/process.service');
 require('./services/ajax.service');
 require('./services/store.service');
 require('./filters/time.filter');
+require('./filters/department.filter');
 require('./directives/calendar.directive');
 require('./controllers/app.controller');
 require('./controllers/main.controller');
 require('./controllers/reservation.controller');
 require('./controllers/tags.controller');
 
-},{"./config":1,"./controllers/app.controller":2,"./controllers/main.controller":3,"./controllers/reservation.controller":4,"./controllers/tags.controller":5,"./directives/calendar.directive":6,"./filters/time.filter":7,"./modules/app.module":9,"./services/ajax.service":10,"./services/process.service":11,"./services/store.service":12}],9:[function(require,module,exports){
+},{"./config":1,"./controllers/app.controller":2,"./controllers/main.controller":3,"./controllers/reservation.controller":4,"./controllers/tags.controller":5,"./directives/calendar.directive":6,"./filters/department.filter":7,"./filters/time.filter":8,"./modules/app.module":10,"./services/ajax.service":11,"./services/process.service":12,"./services/store.service":13}],10:[function(require,module,exports){
 (function(){
   'use strict';
   angular.module('app', ['ui.router','ngSanitize']);
 })();
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('ajaxService', ajaxService);
@@ -535,7 +614,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('processService', processService);
@@ -572,7 +651,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('storeService', storeService);
@@ -756,4 +835,4 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}]},{},[8]);
+},{}]},{},[9]);

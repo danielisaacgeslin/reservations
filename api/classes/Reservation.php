@@ -59,7 +59,8 @@
         public function getReservation($id){
             $link = Connection::connect();
             
-            $query = 'SELECT * FROM RESERVATIONS WHERE ID = :id';
+            $query = 'SELECT A.*, B.FLOOR, B.DEPARTMENT, B.FIRST_NAME, B.LAST_NAME FROM RESERVATIONS AS A'
+                    . 'INNER JOIN USERS AS B ON A.CREATION_USER = B.ID WHERE ID = :id';
             
             $stmt = $link->prepare($query);
             $stmt->bindParam(':id', $id, PDO::PARAM_INT);

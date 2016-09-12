@@ -64,3 +64,27 @@ footer.well {
   margin-bottom: 0;
   padding: 10px 0;
 }
+
+.calendar-directive {
+  .day {
+    float:none;
+    display:inline-block;
+    vertical-align: top;
+    padding: 5px;
+    article {
+      min-height:120px;
+      margin: 0;
+      .panel-body {
+        padding:3px;
+        p {
+          margin:4px;
+        }
+        a {
+          display:block;
+          text-align: left;
+          padding:5px;
+        }
+      }
+    }
+  }
+}

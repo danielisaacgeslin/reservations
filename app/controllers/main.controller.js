@@ -6,6 +6,7 @@
 
 	function mainController($scope, storeService) {
 		var vm = this;
+		vm.date = new Date();
 		vm.reservations = {};
 
 		vm.deleteReservation = deleteReservation;
