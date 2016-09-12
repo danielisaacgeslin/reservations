@@ -415,6 +415,24 @@
 },{}],8:[function(require,module,exports){
 (function(){
 	'use strict';
+	angular.module('app').filter('monthFilter', monthFilter);
+
+	function monthFilter() {
+		return function(items, date){
+      var newItems = {};
+      for(var key in items){
+        if(items[key].date.getMonth() === date.getMonth() && items[key].date.getFullYear() === date.getFullYear()){
+          newItems[key] = items[key];
+        }
+      }
+      return newItems;
+    };
+	}
+})();
+
+},{}],9:[function(require,module,exports){
+(function(){
+	'use strict';
 	angular.module('app').filter('time', timeFilter);
 
 	function timeFilter() {
@@ -440,7 +458,7 @@
 	}
 })();
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 require('./modules/app.module');
 require('./config');
 require('./services/process.service');
@@ -448,19 +466,20 @@ require('./services/ajax.service');
 require('./services/store.service');
 require('./filters/time.filter');
 require('./filters/department.filter');
+require('./filters/month.filter');
 require('./directives/calendar.directive');
 require('./controllers/app.controller');
 require('./controllers/main.controller');
 require('./controllers/reservation.controller');
 require('./controllers/tags.controller');
 
-},{"./config":1,"./controllers/app.controller":2,"./controllers/main.controller":3,"./controllers/reservation.controller":4,"./controllers/tags.controller":5,"./directives/calendar.directive":6,"./filters/department.filter":7,"./filters/time.filter":8,"./modules/app.module":10,"./services/ajax.service":11,"./services/process.service":12,"./services/store.service":13}],10:[function(require,module,exports){
+},{"./config":1,"./controllers/app.controller":2,"./controllers/main.controller":3,"./controllers/reservation.controller":4,"./controllers/tags.controller":5,"./directives/calendar.directive":6,"./filters/department.filter":7,"./filters/month.filter":8,"./filters/time.filter":9,"./modules/app.module":11,"./services/ajax.service":12,"./services/process.service":13,"./services/store.service":14}],11:[function(require,module,exports){
 (function(){
   'use strict';
   angular.module('app', ['ui.router','ngSanitize']);
 })();
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('ajaxService', ajaxService);
@@ -643,7 +662,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('processService', processService);
@@ -680,7 +699,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('storeService', storeService);
@@ -864,4 +883,4 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}]},{},[9]);
+},{}]},{},[10]);

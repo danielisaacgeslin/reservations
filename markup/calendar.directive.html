@@ -10,8 +10,8 @@
       <div class="panel-body">
         <p ng-repeat="item in day.items track by item.id">
           <a class="label label-info" href="#/reservation/{{item.id}}">
-            <span>{{item.floor}}{{item.department | department}}</span>
-             - {{item.time | time}}
+            <span>{{item.floor}}° {{item.department | department}}</span>
+             | {{item.time | time}}
             <small class="pull-right">({{item.first_name}} {{item.last_name}})</small>
           </a>
         </p>

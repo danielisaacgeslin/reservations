@@ -5,6 +5,7 @@ require('./services/ajax.service');
 require('./services/store.service');
 require('./filters/time.filter');
 require('./filters/department.filter');
+require('./filters/month.filter');
 require('./directives/calendar.directive');
 require('./controllers/app.controller');
 require('./controllers/main.controller');
