@@ -3,6 +3,7 @@ require('./config');
 require('./services/process.service');
 require('./services/ajax.service');
 require('./services/store.service');
+require('./filters/time.filter');
 require('./controllers/app.controller');
 require('./controllers/main.controller');
 require('./controllers/reservation.controller');

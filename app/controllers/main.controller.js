@@ -6,23 +6,23 @@
 
 	function mainController($scope, storeService) {
 		var vm = this;
-		vm.articles = {};
+		vm.reservations = {};
 
-		vm.deleteArticle = deleteArticle;
+		vm.deleteReservation = deleteReservation;
 
 		_activate();
 
 		/*private functions*/
 		function _activate(){
-			storeService.getArticleList().then(function(articles){
-				vm.articles = articles;
+			storeService.getReservationList().then(function(reservations){
+				vm.reservations = reservations;
 			});
 		}
 		/*end private functions*/
 
 		/*public functions*/
-		function deleteArticle(articleId){
-			storeService.deleteArticle(articleId);
+		function deleteReservation(articleId){
+			storeService.deleteReservation(articleId);
 		}
 		/*end public functions*/
 	}

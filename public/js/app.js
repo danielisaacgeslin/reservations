@@ -71,23 +71,23 @@
 
 	function mainController($scope, storeService) {
 		var vm = this;
-		vm.articles = {};
+		vm.reservations = {};
 
-		vm.deleteArticle = deleteArticle;
+		vm.deleteReservation = deleteReservation;
 
 		_activate();
 
 		/*private functions*/
 		function _activate(){
-			storeService.getArticleList().then(function(articles){
-				vm.articles = articles;
+			storeService.getReservationList().then(function(reservations){
+				vm.reservations = reservations;
 			});
 		}
 		/*end private functions*/
 
 		/*public functions*/
-		function deleteArticle(articleId){
-			storeService.deleteArticle(articleId);
+		function deleteReservation(articleId){
+			storeService.deleteReservation(articleId);
 		}
 		/*end public functions*/
 	}
@@ -277,23 +277,52 @@
 })();
 
 },{}],6:[function(require,module,exports){
+(function(){
+	'use strict';
+	angular.module('app').filter('time', timeFilter);
+
+	function timeFilter() {
+		return function(input){
+      var output;
+			input = String(input);
+      switch(input){
+        case '1':
+          output = 'Morning';
+          break;
+        case '2':
+          output = 'Afternoon';
+          break;
+        case '3':
+          output = 'Evening';
+          break;
+        default:
+          output = 'invalid time';
+          break;
+      }
+      return output;
+    }
+	}
+})();
+
+},{}],7:[function(require,module,exports){
 require('./modules/app.module');
 require('./config');
 require('./services/process.service');
 require('./services/ajax.service');
 require('./services/store.service');
+require('./filters/time.filter');
 require('./controllers/app.controller');
 require('./controllers/main.controller');
 require('./controllers/reservation.controller');
 require('./controllers/tags.controller');
 
-},{"./config":1,"./controllers/app.controller":2,"./controllers/main.controller":3,"./controllers/reservation.controller":4,"./controllers/tags.controller":5,"./modules/app.module":7,"./services/ajax.service":8,"./services/process.service":9,"./services/store.service":10}],7:[function(require,module,exports){
+},{"./config":1,"./controllers/app.controller":2,"./controllers/main.controller":3,"./controllers/reservation.controller":4,"./controllers/tags.controller":5,"./filters/time.filter":6,"./modules/app.module":8,"./services/ajax.service":9,"./services/process.service":10,"./services/store.service":11}],8:[function(require,module,exports){
 (function(){
   'use strict';
   angular.module('app', ['ui.router','ngSanitize']);
 })();
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('ajaxService', ajaxService);
@@ -476,7 +505,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('processService', processService);
@@ -513,7 +542,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('storeService', storeService);
@@ -697,4 +726,4 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}]},{},[6]);
+},{}]},{},[7]);

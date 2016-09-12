@@ -41,9 +41,9 @@
       <input class="form-control" type="date" ng-model="vm.edition.date"/>
       <label>Time</label>
       <select class="form-control" ng-model="vm.edition.time">
-        <option value="1">Morning</option>
-        <option value="2">Afternoon</option>
-        <option value="3">Evening</option>
+        <option value="1">{{1 | time}}</option>
+        <option value="2">{{2 | time}}</option>
+        <option value="3">{{3 | time}}</option>
       </select>
       <label>Title</label>
       <input class="form-control" type="text" ng-model="vm.edition.title"/>
