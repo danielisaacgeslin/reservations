@@ -1,10 +1,10 @@
 <?php
     /* DIRECTORIES */
-    define("ROOT", $_SERVER["DOCUMENT_ROOT"] . "/dgeslin/");
-    define("ROOT_URL", "https://" . $_SERVER["SERVER_NAME"] . "/dgeslinServer/");
+    define("ROOT", $_SERVER["DOCUMENT_ROOT"] . "/reservations/api/");
+    define("ROOT_URL", "https://" . $_SERVER["SERVER_NAME"] . "/reservations/api/");
     
     /* DATABASE */
-    define("DATA_BASE", "DGESLIN");
+    define("DATA_BASE", "RESERVATIONS");
     define("HOST", "localhost");
     define("DB_USER", "root");
     define("DB_PASSWORD", "");

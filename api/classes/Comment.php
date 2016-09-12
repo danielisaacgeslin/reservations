@@ -1,20 +1,20 @@
 <?php
     class Comment {
-        public function setComment($comment, $article_id){
+        public function setComment($comment, $reservation_id){
             $creation_user = 1;
             
-            if(!isset($comment) or !isset($article_id)){
+            if(!isset($comment) or !isset($reservation_id)){
                 return false;
             }
             
             $link = Connection::connect();
             
-            $query = 'INSERT INTO COMMENTS (TEXT, CREATION_USER, ARTICLE_ID) VALUES (:text, :creation_user, :article_id)';
+            $query = 'INSERT INTO COMMENTS (TEXT, CREATION_USER, RESERVATION_ID) VALUES (:text, :creation_user, :reservation_id)';
             
             $stmt = $link->prepare($query);
             
             $stmt->bindParam(':text', $comment, PDO::PARAM_STR);
-            $stmt->bindParam(':article_id', $article_id, PDO::PARAM_INT);
+            $stmt->bindParam(':reservation_id', $reservation_id, PDO::PARAM_INT);
             $stmt->bindParam(':creation_user', $creation_user, PDO::PARAM_INT);
             
             if($stmt -> execute()){

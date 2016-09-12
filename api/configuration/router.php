@@ -5,43 +5,43 @@
         case 'ping':
             response(OK, array("time" => time()));
             break;
-        case 'getArticle':
-            $article = new Article();
-            response(OK, $article -> getArticle($_GET['id']));
+        case 'getReservation':
+            $reservation = new Reservation();
+            response(OK, $reservation -> getReservation($_GET['id']));
             break;
-        case 'saveArticle':
-            $article = new Article();
-            $result = $article -> setArticle($_POST['title'], $_POST['description'], $_POST['body']);
+        case 'saveReservation':
+            $reservation = new Reservation();
+            $result = $reservation -> setReservation($_POST['title'], $_POST['description'], $_POST['body'], $_POST['date'], $_POST['time']);
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
-        case 'updateArticle':
-            $article = new Article();
-            $result = $article -> updateArticle($_POST['article_id'], $_POST['title'], $_POST['description'], $_POST['body']);
+        case 'updateReservation':
+            $reservation = new Reservation();
+            $result = $reservation -> updateReservation($_POST['reservation_id'], $_POST['title'], $_POST['description'], $_POST['body'], $_POST['date'], $_POST['time']);
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
-        case 'deleteArticle':
-            $article = new Article();
-            $result = $article -> deleteArticle($_POST['article_id']);
+        case 'deleteReservation':
+            $reservation = new Reservation();
+            $result = $reservation -> deleteReservation($_POST['reservation_id']);
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
         case 'addTag':
-            $article = new Article();
-            $result = $article -> addTag($_POST['article_id'], $_POST['tag_id']);
+            $reservation = new Reservation();
+            $result = $reservation -> addTag($_POST['reservation_id'], $_POST['tag_id']);
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
         case 'removeTag':
-            $article = new Article();
-            $result = $article -> removeTag($_POST['article_id'], $_POST['tag_id']);
+            $reservation = new Reservation();
+            $result = $reservation -> removeTag($_POST['reservation_id'], $_POST['tag_id']);
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
-        case 'getArticleList':
-            $articleList = new ArticleList();
-            $result = $articleList -> getArticleList();
+        case 'getReservationList':
+            $reservationList = new ReservationList();
+            $result = $reservationList -> getReservationList();
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
         case 'saveComment':
             $comment = new Comment();
-            $result = $comment -> setComment($_POST['comment'], $_POST['article_id']);
+            $result = $comment -> setComment($_POST['comment'], $_POST['reservation_id']);
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
         case 'deleteComment':
@@ -56,7 +56,7 @@
             break;
         case 'getComments':
             $commentList = new CommentList();
-            $result = $commentList -> getCommentList($_GET['article_id']);
+            $result = $commentList -> getCommentList($_GET['reservation_id']);
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
         case 'saveTag':
@@ -64,9 +64,9 @@
             $result = $tag ->setTag($_POST['tag']);
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
-        case 'getArticleTagList':
+        case 'getReservationTagList':
             $tagList = new TagList();
-            $result = $tagList ->getTagList($_GET['article_id']);
+            $result = $tagList ->getTagList($_GET['reservation_id']);
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
         case 'getTags':

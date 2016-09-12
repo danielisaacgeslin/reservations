@@ -1,9 +1,9 @@
 <?php
-    class ArticleList extends Article{
-        public function getArticleList(){
+    class reservationList extends reservation{
+        public function getReservationList(){
             $link = Connection::connect();
             
-            $query = 'SELECT * FROM ARTICLES';
+            $query = 'SELECT * FROM reservationS';
             
             $stmt = $link->prepare($query);
             $stmt->execute();

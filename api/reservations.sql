@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-09-2016 a las 14:33:04
+-- Tiempo de generación: 12-09-2016 a las 14:38:52
 -- Versión del servidor: 10.1.13-MariaDB
 -- Versión de PHP: 7.0.8
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `comments` (
   `ID` int(11) NOT NULL,
-  `ARTICLE_ID` int(11) NOT NULL,
+  `RESERVATION_ID` int(11) NOT NULL,
   `TEXT` text COLLATE utf8_unicode_ci NOT NULL,
   `CREATION_TIMESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `CREATION_USER` int(11) NOT NULL
@@ -83,7 +83,7 @@ INSERT INTO `tags` (`ID`, `TEXT`, `CREATION_TIMESTAMP`, `CREATION_USER`) VALUES
 
 CREATE TABLE `tag_lists` (
   `ID` int(11) NOT NULL,
-  `ARTICLE_ID` int(11) NOT NULL,
+  `RESERVATION_ID` int(11) NOT NULL,
   `TAG_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -110,7 +110,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`ID`, `USERNAME`, `PASSWORD`, `FIRST_NAME`, `LAST_NAME`, `EMAIL`, `FLOOR`, `DEPARTMENT`, `CREATION_TIMESTAMP`) VALUES
-(1, 'dgeslin', '=(', 'Daniel', 'Geslin', 'danielisaacgeslin@gmail.com', 0, 0, '2016-08-31 15:14:25');
+(1, 'dgeslin', '=(', 'Daniel', 'Geslin', 'danielisaacgeslin@gmail.com', 4, 2, '2016-08-31 15:14:25');
 
 --
 -- Índices para tablas volcadas
@@ -124,8 +124,8 @@ ALTER TABLE `comments`
   ADD KEY `ID` (`ID`),
   ADD KEY `ID_2` (`ID`),
   ADD KEY `CREATION_USER` (`CREATION_USER`),
-  ADD KEY `ARTICLE_ID` (`ARTICLE_ID`),
-  ADD KEY `ARTICLE_ID_2` (`ARTICLE_ID`),
+  ADD KEY `ARTICLE_ID` (`RESERVATION_ID`),
+  ADD KEY `ARTICLE_ID_2` (`RESERVATION_ID`),
   ADD KEY `CREATION_USER_2` (`CREATION_USER`);
 
 --
@@ -156,8 +156,8 @@ ALTER TABLE `tags`
 ALTER TABLE `tag_lists`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `TAG_ID` (`TAG_ID`),
-  ADD KEY `ARTICLE_ID` (`ARTICLE_ID`),
-  ADD KEY `ARTICLE_ID_2` (`ARTICLE_ID`),
+  ADD KEY `ARTICLE_ID` (`RESERVATION_ID`),
+  ADD KEY `ARTICLE_ID_2` (`RESERVATION_ID`),
   ADD KEY `TAG_ID_2` (`TAG_ID`);
 
 --
@@ -203,7 +203,7 @@ ALTER TABLE `users`
 -- Filtros para la tabla `comments`
 --
 ALTER TABLE `comments`
-  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`ARTICLE_ID`) REFERENCES `reservations` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`RESERVATION_ID`) REFERENCES `reservations` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`CREATION_USER`) REFERENCES `users` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
@@ -223,7 +223,7 @@ ALTER TABLE `tags`
 -- Filtros para la tabla `tag_lists`
 --
 ALTER TABLE `tag_lists`
-  ADD CONSTRAINT `tag_lists_ibfk_1` FOREIGN KEY (`ARTICLE_ID`) REFERENCES `reservations` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `tag_lists_ibfk_1` FOREIGN KEY (`RESERVATION_ID`) REFERENCES `reservations` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `tag_lists_ibfk_2` FOREIGN KEY (`TAG_ID`) REFERENCES `tags` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
