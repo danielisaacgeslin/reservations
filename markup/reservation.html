@@ -1,20 +1,20 @@
-<div id="article" class="row">
+<div id="reservation" class="row">
   <div ng-class="{'col-md-9': vm.editEnabled}" class="col-xs-12">
     <article>
       <h5>Tags</h5>
       <ul>
-        <li class="label label-default tag" ng-repeat="(id, tag) in vm.article.tags">
+        <li class="label label-default tag" ng-repeat="(id, tag) in vm.reservation.tags">
           {{tag.text}} <a ng-if="vm.editEnabled" ng-click="vm.deleteTag(tag.id)">x</a>
         </li>
       </ul>
-      <h1 class="title">{{vm.editEnabled ? vm.edition.title : vm.article.title}}</h1>
-      <h3 class="description">{{vm.editEnabled ? vm.edition.description : vm.article.description}}</h3>
-      <p class="body">{{vm.editEnabled ? vm.edition.body : vm.article.body}}</p>
+      <h1 class="title">{{vm.editEnabled ? vm.edition.title : vm.reservation.title}}</h1>
+      <h3 class="description">{{vm.editEnabled ? vm.edition.description : vm.reservation.description}}</h3>
+      <p class="body">{{vm.editEnabled ? vm.edition.body : vm.reservation.body}}</p>
     </article>
-    <div class="comments" ng-if="vm.article.id">
+    <div class="comments" ng-if="vm.reservation.id">
       <h4>Comments</h4>
       <ul>
-        <li class="alert alert-info" ng-repeat="(id, comment) in vm.article.comments">
+        <li class="alert alert-info" ng-repeat="(id, comment) in vm.reservation.comments">
           <p>
             <a class="btn btn-primary delete" ng-click="vm.deleteComment(comment.id)">x</a>
             <span>{{comment.creation_timestamp | date: 'dd/MM/y HH:mm'}} - </span>
@@ -37,13 +37,21 @@
   <div ng-if="vm.editEnabled" class="col-md-3">
     <div>
       <h5>Content</h5>
+      <label>Date</label>
+      <input class="form-control" type="date" ng-model="vm.edition.date"/>
+      <label>Time</label>
+      <select class="form-control" ng-model="vm.edition.time">
+        <option value="1">Morning</option>
+        <option value="2">Afternoon</option>
+        <option value="3">Evening</option>
+      </select>
       <label>Title</label>
       <input class="form-control" type="text" ng-model="vm.edition.title"/>
       <label>Description</label>
       <input class="form-control" type="text" ng-model="vm.edition.description"/>
       <label>Body</label>
       <textarea class="form-control" ng-model="vm.edition.body"></textarea>
-      <button ng-click="vm.saveArticle()" class="btn btn-primary">Save</button>
+      <button ng-click="vm.saveReservation()" class="btn btn-primary">Save</button>
     </div>
     <div>
       <h5>Tags</h5>

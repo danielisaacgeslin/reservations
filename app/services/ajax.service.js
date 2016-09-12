@@ -5,152 +5,156 @@
 	ajaxService.$inject = ['$http', '$httpParamSerializerJQLike', 'constants'];
 
 	function ajaxService($http, $httpParamSerializerJQLike, constants) {
-    var url = constants.serviceUrl;
+		var url = constants.serviceUrl;
 
 		return {
-      /*GET*/
-      ping: ping, // N/A
-      getArticle: getArticle, // article_id(int)
-      getArticleList: getArticleList, // N/A
-      getArticleTagList: getArticleTagList, // article_id(int)
-      getComments: getComments, // article_id(int)
-      getTags: getTags, // N/A
-      /*POST*/
-      saveArticle: saveArticle, // title(string), description(string), body(string)
-      updateArticle: updateArticle, // article_id(int), title(string), description(string), body(string)
-      deleteArticle: deleteArticle, // article_id(int)
-      addTag: addTag, // article_id(int), tag_id(int)
-      removeTag: removeTag, // article_id(int), tag_id(int)
-      saveComment: saveComment, // comment(string), article_id(int)
-      deleteComment: deleteComment, // comment_id(int)
-      updateComment: updateComment, // comment_id(int), comment(string)
-      saveTag: saveTag // tag(string)
-    };
+			/*GET*/
+			ping: ping, // N/A
+			getReservation: getReservation, // reservation_id(int)
+			getReservationList: getReservationList, // N/A
+			getReservationTagList: getReservationTagList, // reservation_id(int)
+			getComments: getComments, // reservation_id(int)
+			getTags: getTags, // N/A
+			/*POST*/
+			saveReservation: saveReservation, // title(string), description(string), body(string), date(string), time(int)
+			updateReservation: updateReservation, // reservation_id(int), title(string), description(string), body(string), date(string), time(int)
+			deleteReservation: deleteReservation, // reservation_id(int)
+			addTag: addTag, // reservation_id(int), tag_id(int)
+			removeTag: removeTag, // reservation_id(int), tag_id(int)
+			saveComment: saveComment, // comment(string), reservation_id(int)
+			deleteComment: deleteComment, // comment_id(int)
+			updateComment: updateComment, // comment_id(int), comment(string)
+			saveTag: saveTag // tag(string)
+		};
 
-    /*N/A*/
-    function ping(){
-      return $http.get(url.concat('?route=ping'));
-    }
+		/*N/A*/
+		function ping(){
+			return $http.get(url.concat('?route=ping'));
+		}
 
-    /*article_id(int)*/
-    function getArticle(articleId){
-      return $http.get(url.concat('?route=getArticle&id=').concat(articleId));
-    }
+		/*reservation_id(int)*/
+		function getReservation(reservationId){
+			return $http.get(url.concat('?route=getReservation&id=').concat(reservationId));
+		}
 
-    /*N/A*/
-    function getArticleList(){
-      return $http.get(url.concat('?route=getArticleList'));
-    }
+		/*N/A*/
+		function getReservationList(){
+			return $http.get(url.concat('?route=getReservationList'));
+		}
 
-    /*article_id(int)*/
-    function getArticleTagList(articleId){
-      return $http.get(url.concat('?route=getArticleTagList&article_id=').concat(articleId));
-    }
+		/*reservation_id(int)*/
+		function getReservationTagList(reservationId){
+			return $http.get(url.concat('?route=getReservationTagList&reservation_id=').concat(reservationId));
+		}
 
-    /*article_id(int)*/
-    function getComments(articleId){
-      return $http.get(url.concat('?route=getComments&article_id=').concat(articleId));
-    }
+		/*reservation_id(int)*/
+		function getComments(reservationId){
+			return $http.get(url.concat('?route=getComments&reservation_id=').concat(reservationId));
+		}
 
-    /*N/A*/
-    function getTags(){
-      return $http.get(url.concat('?route=getTags'));
-    }
+		/*N/A*/
+		function getTags(){
+			return $http.get(url.concat('?route=getTags'));
+		}
 
-    /*title(string), description(string), body(string)*/
-    function saveArticle(title, description, body){
-      return $http({
-				url:url.concat('?route=saveArticle'),
+		/*title(string), description(string), body(string)*/
+		function saveReservation(title, description, body, date, time){
+			return $http({
+				url:url.concat('?route=saveReservation'),
 				method: 'POST',
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 				data:$httpParamSerializerJQLike({
-	        title:title,
-	        description:description,
-	        body:body
-	      })
+					title:title,
+					description:description,
+					body:body,
+					date:date,
+					time:time
+				})
 			});
-    }
+		}
 
-    /*article_id(int), title(string), description(string), body(string)*/
-    function updateArticle(articleId, title, description, body){
-      return $http({
-				url:url.concat('?route=updateArticle'),
-				method: 'POST',
-				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-				data: $httpParamSerializerJQLike({
-	        article_id: articleId,
-	        title:title,
-	        description:description,
-	        body:body
-	      })
-			});
-    }
-
-    /*article_id(int)*/
-    function deleteArticle(articleId){
+		/*reservation_id(int), title(string), description(string), body(string)*/
+		function updateReservation(reservationId, title, description, body, date, time){
 			return $http({
-				url:url.concat('?route=deleteArticle'),
+				url:url.concat('?route=updateReservation'),
 				method: 'POST',
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 				data: $httpParamSerializerJQLike({
-	        article_id: articleId
-	      })
+					reservation_id: reservationId,
+					title:title,
+					description:description,
+					body:body,
+					date:date,
+					time:time
+				})
 			});
-    }
+		}
 
-    /*article_id(int), tag_id(int)*/
-    function addTag(articleId, tagId){
+		/*reservation_id(int)*/
+		function deleteReservation(reservationId){
+			return $http({
+				url:url.concat('?route=deleteReservation'),
+				method: 'POST',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				data: $httpParamSerializerJQLike({
+					reservation_id: reservationId
+				})
+			});
+		}
+
+		/*reservation_id(int), tag_id(int)*/
+		function addTag(reservationId, tagId){
 			return $http({
 				url:url.concat('?route=addTag'),
 				method: 'POST',
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 				data: $httpParamSerializerJQLike({
-					article_id: articleId,
-	        tag_id: tagId
-	      })
+					reservation_id: reservationId,
+					tag_id: tagId
+				})
 			});
-    }
+		}
 
-    /*article_id(int), tag_id(int)*/
-    function removeTag(articleId, tagId){
+		/*reservation_id(int), tag_id(int)*/
+		function removeTag(reservationId, tagId){
 			return $http({
 				url:url.concat('?route=removeTag'),
 				method: 'POST',
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 				data: $httpParamSerializerJQLike({
-					article_id: articleId,
-	        tag_id: tagId
-	      })
+					reservation_id: reservationId,
+					tag_id: tagId
+				})
 			});
-    }
+		}
 
-    /*comment(string), article_id(int)*/
-    function saveComment(comment, articleId){
+		/*comment(string), reservation_id(int)*/
+		function saveComment(comment, reservationId){
 			return $http({
 				url:url.concat('?route=saveComment'),
 				method: 'POST',
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 				data: $httpParamSerializerJQLike({
 					comment: comment,
-	        article_id: articleId
-	      })
+					reservation_id: reservationId
+				})
 			});
-    }
+		}
 
-    /*comment_id(int)*/
-    function deleteComment(commentId){
+		/*comment_id(int)*/
+		function deleteComment(commentId){
 			return $http({
 				url:url.concat('?route=deleteComment'),
 				method: 'POST',
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 				data: $httpParamSerializerJQLike({
 					comment_id: commentId
-	      })
+				})
 			});
-    }
+		}
 
-    /*comment_id(int), comment(string)*/
-    function updateComment (comment, commentId){
+		/*comment_id(int), comment(string)*/
+		function updateComment (comment, commentId){
 			return $http({
 				url:url.concat('?route=updateComment'),
 				method: 'POST',
@@ -158,21 +162,20 @@
 				data: $httpParamSerializerJQLike({
 					comment_id: commentId,
 					comment: comment
-	      })
+				})
 			});
-    }
+		}
 
-    /*tag(string)*/
-    function saveTag(tag){
+		/*tag(string)*/
+		function saveTag(tag){
 			return $http({
 				url:url.concat('?route=saveTag'),
 				method: 'POST',
 				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 				data: $httpParamSerializerJQLike({
 					tag: tag
-	      })
+				})
 			});
-    }
-
+		}
 	}
 })();

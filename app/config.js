@@ -10,10 +10,10 @@
 			templateUrl : 'main.html',
 			controller: 'mainController',
 			controllerAs: 'vm'
-		}).state('/article', {
-			url : '/article/:id',
-      templateUrl : 'article.html',
-      controller: 'articleController',
+		}).state('/reservation', {
+			url : '/reservation/:id',
+      templateUrl : 'reservation.html',
+      controller: 'reservationController',
       controllerAs: 'vm'
 		}).state('/tags', {
 			url : '/tags',
@@ -25,7 +25,7 @@
 
 	function constants(){
 		return {
-			serviceUrl: '/dgeslin/'
+			serviceUrl: '/reservations/api/'
 		};
 	}
 

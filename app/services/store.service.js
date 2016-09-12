@@ -5,72 +5,72 @@
 	storeService.$inject = ['ajaxService', 'processService', '$q'];
 
 	function storeService(ajaxService, processService, $q) {
-    var articles = {}, comments = {}, tags = {};
+    var reservations = {}, comments = {}, tags = {};
 
 		return {
-      getArticle: getArticle,
-      getArticleList: getArticleList,
-      getArticleTagList: getArticleTagList,
+      getReservation: getReservation,
+      getReservationList: getReservationList,
+      getReservationTagList: getReservationTagList,
       getComments: getComments,
       getTags: getTags,
 
-      setArticle: setArticle,
+      setReservation: setReservation,
       setTag: setTag,
       setComment: setComment,
 
       deleteTag: deleteTag,
-      deleteArticle: deleteArticle,
+      deleteReservation: deleteReservation,
       deleteComment: deleteComment,
 
-      resetArticles: resetArticles,
+      resetReservations: resetReservations,
       resetComments: resetComments,
       resetTags: resetTags
     };
 
-    function getArticle(articleId){
+    function getReservation(reservationId){
       var defer = $q.defer();
-      var article;
-      if(articles[articleId]){
-        defer.resolve(articles[articleId]);
+      var reservation;
+      if(reservations[reservationId]){
+        defer.resolve(reservations[reservationId]);
       }else{
-        ajaxService.getArticle(articleId).then(function(response){
-          article = processService.dbArrayAdapter(response.data.payload);
-          articles[articleId] = article[Object.keys(article)[0]];
-					defer.resolve(articles[articleId]);
+        ajaxService.getReservation(reservationId).then(function(response){
+          reservation = processService.dbArrayAdapter(response.data.payload);
+          reservations[reservationId] = reservation[Object.keys(reservation)[0]];
+					defer.resolve(reservations[reservationId]);
         });
       }
       return defer.promise;
     }
 
-    function getArticleList(){
+    function getReservationList(){
       var defer = $q.defer();
-      ajaxService.getArticleList().then(function(response){
-        /*keeping old articles as they were stored*/
-        articles = Object.assign(processService.dbArrayAdapter(response.data.payload), articles);
-        defer.resolve(articles);
+      ajaxService.getReservationList().then(function(response){
+        /*keeping old reservations as they were stored*/
+        reservations = Object.assign(processService.dbArrayAdapter(response.data.payload), reservations);
+        defer.resolve(reservations);
       });
       return defer.promise;
     }
 
-    function getArticleTagList(articleId){
+    function getReservationTagList(reservationId){
       var defer = $q.defer();
-			var articleTags;
-			ajaxService.getArticleTagList(articleId).then(function(response){
-				articleTags = processService.dbArrayAdapter(response.data.payload);
-				Object.assign(tags, articleTags);
-				articles[articleId].tags = articleTags;
-        defer.resolve(articleTags);
+			var reservationTags;
+			ajaxService.getReservationTagList(reservationId).then(function(response){
+				reservationTags = processService.dbArrayAdapter(response.data.payload);
+				Object.assign(tags, reservationTags);
+				reservations[reservationId].tags = reservationTags;
+        defer.resolve(reservationTags);
 			});
       return defer.promise;
     }
 
-    function getComments(articleId){
+    function getComments(reservationId){
       var defer = $q.defer();
       var newComments;
-      ajaxService.getComments(articleId).then(function(response){
+      ajaxService.getComments(reservationId).then(function(response){
         newComments = processService.dbArrayAdapter(response.data.payload);
         Object.assign(comments,newComments);
-        articles[articleId].comments = newComments;
+        reservations[reservationId].comments = newComments;
         defer.resolve();
       });
       return defer.promise;
@@ -85,32 +85,32 @@
       return defer.promise;
     }
 
-    function setArticle(title, description, body, articleId){
+    function setReservation(title, description, body, date, time, reservationId){
       var defer = $q.defer();
       /*save*/
-      if(!articleId){
-        ajaxService.saveArticle(title, description, body).then(function(response){
+      if(!reservationId){
+        ajaxService.saveReservation(title, description, body, date, time).then(function(response){
           defer.resolve(response.data.payload);
         });
       /*update*/
       }else{
-        ajaxService.updateArticle(articleId, title, description, body).then(function(response){
-          resetArticle(articleId);
-          defer.resolve(articleId);
+        ajaxService.updateReservation(reservationId, title, description, body, date, time).then(function(response){
+          resetReservation(reservationId);
+          defer.resolve(reservationId);
         });
       }
       return defer.promise;
     }
 
-    function setTag(articleId, tagId, tag){
+    function setTag(reservationId, tagId, tag){
       var defer = $q.defer();
-			ajaxService.addTag(articleId, tagId).then(function(response){
+			ajaxService.addTag(reservationId, tagId).then(function(response){
 				defer.resolve(response.data.payload);
 			});
       return defer.promise;
     }
 
-    function setComment(comment, articleId, commentId){
+    function setComment(comment, reservationId, commentId){
       var defer = $q.defer();
 			var newComment = {};
       if(comment, commentId){
@@ -119,55 +119,55 @@
           defer.resolve(response);
         });
       }else{
-        ajaxService.saveComment(comment, articleId).then(function(response){
+        ajaxService.saveComment(comment, reservationId).then(function(response){
           newComment = {id: response.data.payload, text: comment, creation_timestamp: new Date()};
 					comments[response.data.payload] = newComment;
-					articles[articleId].comments[response.data.payload] = newComment;
+					reservations[reservationId].comments[response.data.payload] = newComment;
           defer.resolve(response);
         });
       }
       return defer.promise;
     }
 
-    function deleteTag(articleId, tagId){
+    function deleteTag(reservationId, tagId){
       var defer = $q.defer();
-			ajaxService.removeTag(articleId, tagId).then(function(response){
-				delete articles[articleId].tags[tagId];
+			ajaxService.removeTag(reservationId, tagId).then(function(response){
+				delete reservations[reservationId].tags[tagId];
 				defer.resolve();
 			});
       return defer.promise;
     }
 
-    function deleteArticle(articleId){
+    function deleteReservation(reservationId){
       var defer = $q.defer();
-      ajaxService.deleteArticle(articleId).then(function(response){
-        if(articles[articleId].comments){
-          for(var key in articles[articleId].comments){
+      ajaxService.deleteReservation(reservationId).then(function(response){
+        if(reservations[reservationId].comments){
+          for(var key in reservations[reservationId].comments){
             delete comments[key];
           }
         }
-        delete articles[articleId];
+        delete reservations[reservationId];
         defer.resolve(response);
       });
       return defer.promise;
     }
 
-    function deleteComment(commentId, articleId){
+    function deleteComment(commentId, reservationId){
       var defer = $q.defer();
       ajaxService.deleteComment(commentId).then(function(response){
         delete comments[commentId];
-        delete articles[articleId].comments[commentId];
+        delete reservations[reservationId].comments[commentId];
         defer.resolve(response);
       });
       return defer.promise;
     }
 
-    function resetArticles(){
-      articles = {};
+    function resetReservations(){
+      reservations = {};
     }
 
-    function resetArticle(articleId){
-      delete articles[articleId];
+    function resetReservation(reservationId){
+      delete reservations[reservationId];
     }
 
     function resetTags(){

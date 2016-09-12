@@ -21,6 +21,9 @@
           if(new RegExp('timestamp','i').test(key)){
             value = new Date(value);
           }
+					if(key === 'DATE'){
+						value = new Date(value.replace('-','/').replace('-','/'));
+					}
           tempObj[key.toLowerCase()] = value;
         }
         dbObject[tempObj.id] = tempObj;

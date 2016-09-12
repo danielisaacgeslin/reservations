@@ -1,12 +1,12 @@
 (function(){
 	'use strict';
-	angular.module('app').controller('articleController', articleController);
+	angular.module('app').controller('reservationController', reservationController);
 
-	articleController.$inject = ['$scope', '$state', '$q', 'storeService'];
+	reservationController.$inject = ['$scope', '$state', '$q', 'storeService'];
 
-	function articleController($scope, $state, $q, storeService) {
+	function reservationController($scope, $state, $q, storeService) {
 		var vm = this;
-		vm.article = {};
+		vm.reservation = {};
     vm.edition = {};
     vm.newComment = '';
     vm.editableComment = -1;
@@ -18,7 +18,7 @@
 		vm.editEnabled = true;
 
     vm.toggleEdit = toggleEdit;
-    vm.saveArticle = saveArticle;
+    vm.saveReservation = saveReservation;
     vm.saveComment = saveComment;
     vm.editComment = editComment;
     vm.updateComment = updateComment;
@@ -32,26 +32,26 @@
       if(isNaN($state.params.id)){
 				_getTags().then(_filterTags);
       }else{
-        _getArticle().then(function(){
+        _getReservation().then(function(){
 					_getComments();
-					$q.all([_getArticleTagList(), _getTags()]).then(_filterTags);
+					$q.all([_getReservationTagList(), _getTags()]).then(_filterTags);
 				});
       }
 		}
 
-    function _getArticle(){
-      return storeService.getArticle(vm.tempId ? vm.tempId : $state.params.id).then(function(article){
-				vm.article = article;
-        vm.edition = Object.assign({},article);
+    function _getReservation(){
+      return storeService.getReservation(vm.tempId ? vm.tempId : $state.params.id).then(function(reservation){
+				vm.reservation = reservation;
+        vm.edition = Object.assign({},reservation);
 			});
     }
 
     function _getComments(){
-      return storeService.getComments(vm.article.id);
+      return storeService.getComments(vm.reservation.id);
     }
 
-		function _getArticleTagList(){
-			return storeService.getArticleTagList(vm.article.id);
+		function _getReservationTagList(){
+			return storeService.getReservationTagList(vm.reservation.id);
 		}
 
 		function _getTags(){
@@ -62,15 +62,15 @@
 
 		function _filterTags(){
 			var filteredTags = {},  marker;
-			if(!vm.article.id){
+			if(!vm.reservation.id){
 				vm.filteredTags = vm.noTagOption;
 				vm.selectedTag = vm.filteredTags[Object.keys(vm.filteredTags)[0]];
 				return false;
 			}
 			for(var tagKey in vm.tags){
 				marker = true;
-					for(var articleTagKey in vm.article.tags){
-						if(articleTagKey === vm.tags[tagKey].id){
+					for(var reservationTagKey in vm.reservation.tags){
+						if(reservationTagKey === vm.tags[tagKey].id){
 							marker = false;
 							break;
 						}
@@ -86,11 +86,16 @@
 			vm.selectedTag = vm.filteredTags[Object.keys(vm.filteredTags)[0]];
 		}
 
-		function _setArticle(){
-			return storeService.setArticle(vm.edition.title, vm.edition.description, vm.edition.body, vm.article.id).then(function(id){
-        if(!vm.article.id){
+		function _setReservation(){
+			return storeService.setReservation(vm.edition.title,
+				 vm.edition.description,
+				 vm.edition.body,
+				 vm.edition.date,
+				 vm.edition.time,
+				 vm.reservation.id).then(function(id){
+        if(!vm.reservation.id){
 					vm.tempId = id;
-          $state.go('/article', {id: id}, {
+          $state.go('/reservation', {id: id}, {
 					    notify:false,
 					    reload:false,
 					    location:'replace',
@@ -105,16 +110,16 @@
     function toggleEdit(){
       vm.editEnabled = !vm.editEnabled;
       if(!vm.editEnabled){
-        vm.edition = Object.assign({},vm.article);
+        vm.edition = Object.assign({},vm.reservation);
       }
     }
 
-    function saveArticle(){
-      _setArticle().then(_getArticle).then(_getArticleTagList).then(_filterTags);
+    function saveReservation(){
+      _setReservation().then(_getReservation).then(_getReservationTagList).then(_filterTags);
     }
 
     function saveComment(){
-      return storeService.setComment(vm.newComment, vm.article.id).then(function(){
+      return storeService.setComment(vm.newComment, vm.reservation.id).then(function(){
         vm.newComment = '';
       });
     }
@@ -129,20 +134,20 @@
         vm.editableComment = -1;
       }else{
         vm.editableComment = index;
-        vm.editableCommentText = !commentId ? '' : vm.article.comments[commentId].text;
+        vm.editableCommentText = !commentId ? '' : vm.reservation.comments[commentId].text;
       }
     }
 
     function deleteComment(commentId){
-      return storeService.deleteComment(commentId, vm.article.id);
+      return storeService.deleteComment(commentId, vm.reservation.id);
     }
 
 		function setTag(){
-			storeService.setTag(vm.article.id, vm.selectedTag.id).then(_getArticleTagList).then(_filterTags);
+			storeService.setTag(vm.reservation.id, vm.selectedTag.id).then(_getReservationTagList).then(_filterTags);
 		}
 
 		function deleteTag(tagId){
-			return storeService.deleteTag(vm.article.id, tagId).then(_filterTags);
+			return storeService.deleteTag(vm.reservation.id, tagId).then(_filterTags);
 		}
     /*end public functions*/
 
