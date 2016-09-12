@@ -1,0 +1,46 @@
+{
+  "name": "dantools",
+  "version": "1.0.0",
+  "description": "dantools",
+  "main": "gulpfile.js",
+  "scripts": {},
+  "devDependencies" : {
+    "gulp": "",
+    "gulp-angular-templatecache": "",
+    "gulp-inject": "",
+    "gulp-ng-annotate": "",
+    "gulp-clean-css": "",
+    "gulp-uglify": "",
+    "gulp-htmlmin": "",
+    "gulp-connect": "",
+    "gulp-imagemin": "",
+    "gulp-sass": "",
+    "gulp-jshint": "",
+    "angular": "",
+    "angular-sanitize": "",
+    "bootstrap": "",
+    "font-awesome": "",
+    "angular-ui-router": "",
+    "angular-animate": "",
+    "angular-bootstrap": "",
+    "angular-material": "",
+    "browserify": "",
+    "vinyl-source-stream": "",
+    "run-sequence": "",
+    "jshint": "",
+    "gulp-jshint-file-reporter": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielisaacgeslin/dantools.git"
+  },
+  "keywords": [
+    "dantools"
+  ],
+  "author": "dan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielisaacgeslin/dantools/issues"
+  },
+  "homepage": "https://github.com/danielisaacgeslin/dantools#readme"
+}

@@ -1,0 +1,66 @@
+/*general*/
+.transition {transition:All 0.2s ease-in-out; -webkit-transition:All 0.2s ease-in-out; -moz-transition:All 0.2s ease-in-out; -o-transition:All 0.2s ease-in-out;}
+
+a {
+  cursor:pointer;
+}
+
+textarea {
+  resize: vertical;
+}
+
+#article {
+  ul {
+    margin:0;
+    padding:0;
+    list-style: none;
+  }
+  article {
+    .title {
+
+    }
+    .description {
+
+    }
+    .body {
+      min-height: 200px;
+      margin-bottom:15px;
+    }
+  }
+  .tag {
+    margin-right:5px;
+    a {
+      padding:0 3px;
+    }
+  }
+  textarea {
+    min-height:150px;
+  }
+  button {
+    margin-top:10px;
+  }
+  .comments {
+    .delete {
+      padding:0 5px;
+      font-weight:bold;
+      margin-right:5px;
+      vertical-align: initial;
+    }
+    .edit {
+      padding:0 5px;
+      margin-left: 5px;
+    }
+    .comment-edit {
+      margin-top:10px;
+      textarea {
+        min-height:75px;
+      }
+    }
+  }
+}
+
+footer.well {
+  margin-top: 30px;
+  margin-bottom: 0;
+  padding: 10px 0;
+}

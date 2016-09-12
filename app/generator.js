@@ -1,0 +1,9 @@
+require('./modules/app.module');
+require('./config');
+require('./services/process.service');
+require('./services/ajax.service');
+require('./services/store.service');
+require('./controllers/app.controller');
+require('./controllers/main.controller');
+require('./controllers/article.controller');
+require('./controllers/tags.controller');
