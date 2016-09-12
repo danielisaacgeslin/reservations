@@ -14,14 +14,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="(id, reservation) in vm.reservations">
+        <tr ng-repeat="(id, reservation) in vm.reservations track by id">
           <td>{{$index + 1}}</td>
           <td>{{reservation.id}}</td>
           <td>{{reservation.date | date: 'dd/MM/y'}}</td>
           <td>{{reservation.time | time}}</td>
           <td>{{reservation.title}}</td>
           <td>{{reservation.creation_timestamp | date: 'dd/MM/y HH:mm'}}</td>
-          <td><a ng-click="vm.deleteArticle(reservation.id)">delete</a></td>
+          <td><a ng-click="vm.deleteReservation(reservation.id)">delete</a></td>
           <td><a ng-href="#/reservation/{{reservation.id}}">link</a></td>
         </tr>
       </tbody>

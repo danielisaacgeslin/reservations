@@ -112,6 +112,7 @@
 		vm.selectedTag = null;
 		vm.tempId = null;
 		vm.editEnabled = true;
+		vm.times = [1,2,3];
 
     vm.toggleEdit = toggleEdit;
     vm.saveReservation = saveReservation;
