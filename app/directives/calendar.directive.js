@@ -11,7 +11,8 @@
       link: link,
       scope: {
           data: '=',
-					date: '='
+					date: '=',
+					count: '='
       }
     };
 
@@ -25,6 +26,7 @@
 				var month = $scope.date.getMonth();
 				var year = $scope.date.getFullYear();
 				var days = _getDaysInMonth(month, year);
+				var count = 0;
 
 				days = days.map(function(day){
 					day.items = [];
@@ -33,10 +35,12 @@
 						if(_compareDates(day.date, $scope.data[item].date)){
 							day.items.push($scope.data[item]);
 							day.empty = false;
+							count++;
 						}
 					}
 					return day;
 				});
+				$scope.count = count;
 				$scope.days = days;
 			}
 

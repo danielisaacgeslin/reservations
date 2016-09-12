@@ -1,4 +1,4 @@
-<div class="row" id="article-list">
+<div class="row" id="reservation-list">
   <div class="col-xs-12">
     <h1>Reservations</h1>
     <ul class="nav nav-pills center switch">
@@ -8,18 +8,21 @@
     <div class="row picker">
       <div class="col-md-4 col-xs-12"><button class="btn btn-primary pull-left" ng-click="vm.prev(vm.date)">Prev</button></div>
       <div class="col-md-4 col-xs-12">
-        <p class="center text-center text-primary"><strong>{{vm.date | date: 'MMMM yyyy'}}</strong></p>
+        <p class="center text-center text-primary">
+          <strong>{{vm.date | date: 'MMMM yyyy'}}</strong>
+        </p>
       </div>
       <div class="col-md-4 col-xs-12"><button class="btn btn-primary pull-right" ng-click="vm.next()">Next</button></div>
     </div>
-    <calendar ng-if="vm.visualization === 'calendar'" date="vm.date" data="vm.reservations"></calendar>
+    <calendar ng-if="vm.visualization === 'calendar'" date="vm.date" data="vm.reservations" count="vm.reservationCount"></calendar>
     <table ng-if="vm.visualization === 'table'" class="table table-striped">
       <thead>
         <tr>
           <th></th>
           <th>ID</th>
           <th>Date</th>
-          <th>Department<th>
+          <th>Department</th>
+          <th>Name</th>
           <th>Time</th>
           <th>Title</th>
           <th>Creation</th>
@@ -32,11 +35,12 @@
           <td>{{reservation.id}}</td>
           <td>{{reservation.date | date: 'dd/MM/y'}}</td>
           <td>{{reservation.floor}}° {{reservation.department | department}}</td>
+          <td>{{reservation.first_name}} {{reservation.last_name}}</td>
           <td>{{reservation.time | time}}</td>
           <td>{{reservation.title}}</td>
           <td>{{reservation.creation_timestamp | date: 'dd/MM/y HH:mm'}}</td>
           <td><a ng-click="vm.deleteReservation(reservation.id)">delete</a></td>
-          <td><a ng-href="#/reservation/{{reservation.id}}">link</a></td>
+          <td><a ng-href="#/reservation/{{reservation.id}}">details</a></td>
         </tr>
       </tbody>
     </table>

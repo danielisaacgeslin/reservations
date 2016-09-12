@@ -9,6 +9,7 @@
 		vm.visualization = 'calendar';
 		vm.date = new Date();
 		vm.reservations = {};
+		vm.reservationCount = 0;
 
 		vm.deleteReservation = deleteReservation;
 		vm.switchVisualization = switchVisualization;

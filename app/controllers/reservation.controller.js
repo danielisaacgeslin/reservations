@@ -116,7 +116,7 @@
     }
 
     function saveReservation(){
-      _setReservation().then(_getReservation).then(_getReservationTagList).then(_filterTags);
+      _setReservation().then(_getReservation).then(_getReservationTagList).then(_getComments).then(_filterTags);
     }
 
     function saveComment(){
