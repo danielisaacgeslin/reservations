@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-09-2016 a las 00:39:15
+-- Tiempo de generación: 12-09-2016 a las 14:33:04
 -- Versión del servidor: 10.1.13-MariaDB
 -- Versión de PHP: 7.0.8
 
@@ -17,25 +17,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `dgeslin`
+-- Base de datos: `reservations`
 --
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `articles`
---
-
-CREATE TABLE `articles` (
-  `ID` int(11) NOT NULL,
-  `CREATION_TIMESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `EDITION_TIMESTAMP` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `TITLE` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
-  `DESCRIPTION` varchar(350) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `BODY` text COLLATE utf8_unicode_ci,
-  `CREATION_USER` int(11) NOT NULL,
-  `EDITION_USER` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -49,6 +32,25 @@ CREATE TABLE `comments` (
   `TEXT` text COLLATE utf8_unicode_ci NOT NULL,
   `CREATION_TIMESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `CREATION_USER` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `reservations`
+--
+
+CREATE TABLE `reservations` (
+  `ID` int(11) NOT NULL,
+  `CREATION_TIMESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `EDITION_TIMESTAMP` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `TITLE` varchar(150) COLLATE utf8_unicode_ci NOT NULL,
+  `DESCRIPTION` varchar(350) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `BODY` text COLLATE utf8_unicode_ci,
+  `DATE` date NOT NULL,
+  `TIME` tinyint(4) NOT NULL,
+  `CREATION_USER` int(11) NOT NULL,
+  `EDITION_USER` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -69,14 +71,9 @@ CREATE TABLE `tags` (
 --
 
 INSERT INTO `tags` (`ID`, `TEXT`, `CREATION_TIMESTAMP`, `CREATION_USER`) VALUES
-(1, 'sports', '2016-09-06 13:05:34', 1),
-(2, 'economics', '2016-09-06 13:05:34', 1),
-(3, 'politics', '2016-09-06 13:05:50', 1),
-(4, 'games', '2016-09-06 13:05:50', 1),
-(5, 'news', '2016-09-06 13:06:13', 1),
-(6, 'science', '2016-09-06 13:06:13', 1),
-(7, 'winter sports', '2016-09-06 13:06:44', 1),
-(8, 'international', '2016-09-06 13:06:44', 1);
+(1, 'SUM', '2016-09-06 13:05:34', 1),
+(2, 'pool', '2016-09-06 13:05:34', 1),
+(3, 'grill', '2016-09-06 13:05:50', 1);
 
 -- --------------------------------------------------------
 
@@ -103,6 +100,8 @@ CREATE TABLE `users` (
   `FIRST_NAME` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `LAST_NAME` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `EMAIL` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `FLOOR` tinyint(4) NOT NULL,
+  `DEPARTMENT` tinyint(4) NOT NULL,
   `CREATION_TIMESTAMP` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -110,25 +109,12 @@ CREATE TABLE `users` (
 -- Volcado de datos para la tabla `users`
 --
 
-INSERT INTO `users` (`ID`, `USERNAME`, `PASSWORD`, `FIRST_NAME`, `LAST_NAME`, `EMAIL`, `CREATION_TIMESTAMP`) VALUES
-(1, 'dgeslin', '=(', 'Daniel', 'Geslin', 'danielisaacgeslin@gmail.com', '2016-08-31 15:14:25');
+INSERT INTO `users` (`ID`, `USERNAME`, `PASSWORD`, `FIRST_NAME`, `LAST_NAME`, `EMAIL`, `FLOOR`, `DEPARTMENT`, `CREATION_TIMESTAMP`) VALUES
+(1, 'dgeslin', '=(', 'Daniel', 'Geslin', 'danielisaacgeslin@gmail.com', 0, 0, '2016-08-31 15:14:25');
 
 --
 -- Índices para tablas volcadas
 --
-
---
--- Indices de la tabla `articles`
---
-ALTER TABLE `articles`
-  ADD PRIMARY KEY (`ID`),
-  ADD KEY `ID` (`ID`),
-  ADD KEY `CREATION_USER` (`CREATION_USER`),
-  ADD KEY `EDITION_USER` (`EDITION_USER`),
-  ADD KEY `CREATION_USER_2` (`CREATION_USER`),
-  ADD KEY `CREATION_USER_3` (`CREATION_USER`),
-  ADD KEY `CREATION_USER_4` (`CREATION_USER`),
-  ADD KEY `EDITION_USER_2` (`EDITION_USER`);
 
 --
 -- Indices de la tabla `comments`
@@ -141,6 +127,19 @@ ALTER TABLE `comments`
   ADD KEY `ARTICLE_ID` (`ARTICLE_ID`),
   ADD KEY `ARTICLE_ID_2` (`ARTICLE_ID`),
   ADD KEY `CREATION_USER_2` (`CREATION_USER`);
+
+--
+-- Indices de la tabla `reservations`
+--
+ALTER TABLE `reservations`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID` (`ID`),
+  ADD KEY `CREATION_USER` (`CREATION_USER`),
+  ADD KEY `EDITION_USER` (`EDITION_USER`),
+  ADD KEY `CREATION_USER_2` (`CREATION_USER`),
+  ADD KEY `CREATION_USER_3` (`CREATION_USER`),
+  ADD KEY `CREATION_USER_4` (`CREATION_USER`),
+  ADD KEY `EDITION_USER_2` (`EDITION_USER`);
 
 --
 -- Indices de la tabla `tags`
@@ -172,15 +171,15 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT de la tabla `articles`
---
-ALTER TABLE `articles`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
---
 -- AUTO_INCREMENT de la tabla `comments`
 --
 ALTER TABLE `comments`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+--
+-- AUTO_INCREMENT de la tabla `reservations`
+--
+ALTER TABLE `reservations`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT de la tabla `tags`
 --
@@ -201,18 +200,18 @@ ALTER TABLE `users`
 --
 
 --
--- Filtros para la tabla `articles`
---
-ALTER TABLE `articles`
-  ADD CONSTRAINT `articles_ibfk_1` FOREIGN KEY (`CREATION_USER`) REFERENCES `users` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `articles_ibfk_2` FOREIGN KEY (`EDITION_USER`) REFERENCES `users` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
 -- Filtros para la tabla `comments`
 --
 ALTER TABLE `comments`
-  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`ARTICLE_ID`) REFERENCES `articles` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`ARTICLE_ID`) REFERENCES `reservations` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`CREATION_USER`) REFERENCES `users` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `reservations`
+--
+ALTER TABLE `reservations`
+  ADD CONSTRAINT `reservations_ibfk_1` FOREIGN KEY (`CREATION_USER`) REFERENCES `users` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `reservations_ibfk_2` FOREIGN KEY (`EDITION_USER`) REFERENCES `users` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `tags`
@@ -224,7 +223,7 @@ ALTER TABLE `tags`
 -- Filtros para la tabla `tag_lists`
 --
 ALTER TABLE `tag_lists`
-  ADD CONSTRAINT `tag_lists_ibfk_1` FOREIGN KEY (`ARTICLE_ID`) REFERENCES `articles` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `tag_lists_ibfk_1` FOREIGN KEY (`ARTICLE_ID`) REFERENCES `reservations` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `tag_lists_ibfk_2` FOREIGN KEY (`TAG_ID`) REFERENCES `tags` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
