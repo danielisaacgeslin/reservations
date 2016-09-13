@@ -1,6 +1,6 @@
 <?php
     $route = isset($_GET['route']) ? $_GET['route'] : '';
-    
+
     switch($route){
         case 'ping':
             response(OK, array("time" => time()));
@@ -11,12 +11,12 @@
             break;
         case 'saveReservation':
             $reservation = new Reservation();
-            $result = $reservation -> setReservation($_POST['title'], $_POST['description'], $_POST['body'], $_POST['date'], $_POST['time']);
+            $result = $reservation -> setReservation($_POST['title'], $_POST['date'], $_POST['time']);
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
         case 'updateReservation':
             $reservation = new Reservation();
-            $result = $reservation -> updateReservation($_POST['reservation_id'], $_POST['title'], $_POST['description'], $_POST['body'], $_POST['date'], $_POST['time']);
+            $result = $reservation -> updateReservation($_POST['reservation_id'], $_POST['title'], $_POST['date'], $_POST['time']);
             ($result ? response(OK, $result) : response(ERROR, ""));
             break;
         case 'deleteReservation':

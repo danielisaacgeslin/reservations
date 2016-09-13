@@ -1,15 +1,15 @@
 <div id="reservation" class="row">
   <div ng-class="{'col-md-9': vm.editEnabled}" class="col-xs-12">
     <article>
-      <h5>Tags</h5>
+      <h3>{{vm.reservation.date | date: 'dd/MM/y'}} {{vm.reservation.time | time}}</h3>
       <ul>
         <li class="label label-default tag" ng-repeat="(id, tag) in vm.reservation.tags">
           {{tag.text}} <a ng-if="vm.editEnabled" ng-click="vm.deleteTag(tag.id)">x</a>
         </li>
       </ul>
       <h1 class="title">{{vm.editEnabled ? vm.edition.title : vm.reservation.title}}</h1>
-      <h3 class="description">{{vm.editEnabled ? vm.edition.description : vm.reservation.description}}</h3>
-      <p class="body">{{vm.editEnabled ? vm.edition.body : vm.reservation.body}}</p>
+      <!--<h3 class="description">{{vm.editEnabled ? vm.edition.description : vm.reservation.description}}</h3>-->
+      <!--<p class="body">{{vm.editEnabled ? vm.edition.body : vm.reservation.body}}</p>-->
     </article>
     <div class="comments" ng-if="vm.reservation.id">
       <h4>Comments</h4>
@@ -35,8 +35,8 @@
     </div>
   </div>
   <div ng-if="vm.editEnabled" class="col-md-3">
-    <div>
-      <h5>Content</h5>
+    <div class="content-edition clearfix">
+      <h5>Edit content</h5>
       <label>Date</label>
       <input class="form-control" type="date" ng-model="vm.edition.date"/>
       <label>Time</label>
@@ -45,11 +45,11 @@
       </select>
       <label>Title</label>
       <input class="form-control" type="text" ng-model="vm.edition.title"/>
-      <label>Description</label>
+      <!--<label>Description</label>
       <input class="form-control" type="text" ng-model="vm.edition.description"/>
       <label>Body</label>
-      <textarea class="form-control" ng-model="vm.edition.body"></textarea>
-      <button ng-click="vm.saveReservation()" class="btn btn-primary">Save</button>
+      <textarea class="form-control" ng-model="vm.edition.body"></textarea>-->
+      <button ng-click="vm.saveReservation()" class="btn btn-primary col-xs-12">Save</button>
     </div>
     <div>
       <h5>Tags</h5>
@@ -57,7 +57,7 @@
               class="form-control"
               ng-options="tag as tag.text for tag in vm.filteredTags track by tag.id"
               ng-model="vm.selectedTag"></select>
-      <button ng-click="vm.setTag()" ng-disabled="vm.filteredTags[0]" class="btn btn-default">Add Tag</button>
+      <button ng-click="vm.setTag()" ng-disabled="vm.filteredTags[0]" class="btn btn-default pull-right">Add Tag</button>
     </div>
   </div>
 </div>

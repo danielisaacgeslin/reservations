@@ -17,7 +17,7 @@
           output = 'Evening';
           break;
         default:
-          output = 'invalid time';
+          output = '';
           break;
       }
       return output;

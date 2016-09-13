@@ -1,21 +1,18 @@
 <?php
     class Reservation {
-        public function setReservation($title, $description, $body, $date, $time){
+        public function setReservation($title, $date, $time){
             $creation_user = 1;
-
-            if(!isset($title) or !isset($description) or !isset($body) or !isset($date) or !isset($time)){
+            if(!isset($title) or !isset($date) or !isset($time)){
                 return false;
             }
 
             $link = Connection::connect();
             $query = 'INSERT INTO RESERVATIONS '
-                    . '(TITLE, DESCRIPTION, BODY, DATE, TIME, CREATION_USER) '
-                    . 'VALUES (:title, :description, :body, :date, :time, :creation_user)';
+                    . '(TITLE, DATE, TIME, CREATION_USER) '
+                    . 'VALUES (:title, :date, :time, :creation_user)';
             $stmt = $link->prepare($query);
 
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-            $stmt->bindParam(':description', $description, PDO::PARAM_STR);
-            $stmt->bindParam(':body', $body, PDO::PARAM_STR);
             $stmt->bindParam(':date', $date, PDO::PARAM_STR);
             $stmt->bindParam(':time', $time, PDO::PARAM_INT);
             $stmt->bindParam(':creation_user', $creation_user, PDO::PARAM_INT);
@@ -27,24 +24,21 @@
             }
         }
 
-        public function updateReservation($reservation_id, $title, $description, $body, $date, $time){
+        public function updateReservation($reservation_id, $title, $date, $time){
             $user = 1;
-
-            if(!isset($reservation_id) or !isset($title) or !isset($description) or !isset($body) or !isset($date) or !isset($time)){
+            if(!isset($reservation_id) or !isset($title) or !isset($date) or !isset($time)){
                 return false;
             }
 
             $link = Connection::connect();
             $query = 'UPDATE RESERVATIONS SET '
-                    . 'TITLE = :title, DESCRIPTION = :description, BODY = :body, DATE = :date, TIME = :time, '
+                    . 'TITLE = :title, DATE = :date, TIME = :time, '
                     . 'EDITION_USER = :edition_user, EDITION_TIMESTAMP = CURRENT_TIMESTAMP '
                     . 'WHERE ID = :reservation_id';
             $stmt = $link->prepare($query);
 
             $stmt->bindParam(':reservation_id', $reservation_id, PDO::PARAM_INT);
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-            $stmt->bindParam(':description', $description, PDO::PARAM_STR);
-            $stmt->bindParam(':body', $body, PDO::PARAM_STR);
             $stmt->bindParam(':date', $date, PDO::PARAM_STR);
             $stmt->bindParam(':time', $time, PDO::PARAM_INT);
             $stmt->bindParam(':edition_user', $user, PDO::PARAM_INT);

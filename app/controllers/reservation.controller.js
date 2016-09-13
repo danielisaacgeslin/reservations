@@ -7,7 +7,10 @@
 	function reservationController($scope, $state, $q, storeService) {
 		var vm = this;
 		vm.reservation = {};
-    vm.edition = {};
+    vm.edition = {
+			time: '1',
+			date: new Date()
+		};
     vm.newComment = '';
     vm.editableComment = -1;
     vm.editableCommentText = '';
