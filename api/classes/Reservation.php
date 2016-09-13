@@ -1,5 +1,5 @@
 <?php
-    class reservation {
+    class Reservation {
         public function setReservation($title, $description, $body, $date, $time){
             $creation_user = 1;
 
