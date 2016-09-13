@@ -37,19 +37,22 @@
   <div ng-if="vm.editEnabled" class="col-md-3">
     <div class="content-edition clearfix">
       <h5>Edit content</h5>
-      <label>Date</label>
-      <input class="form-control" type="date" ng-model="vm.edition.date"/>
-      <label>Time</label>
-      <select class="form-control" ng-model="vm.edition.time">
-        <option ng-repeat="time in vm.times" value="{{time}}">{{time | time}}</option>
-      </select>
       <label>Title</label>
       <input class="form-control" type="text" ng-model="vm.edition.title"/>
+      <div class="form-group" ng-class="{'has-error': !vm.reservationValidity}">
+        <label>Date</label>
+        <input class="form-control" type="date" ng-model="vm.edition.date"/>
+        <label>Time</label>
+        <select class="form-control" ng-model="vm.edition.time">
+          <option ng-repeat="time in vm.times" value="{{time}}">{{time | time}}</option>
+        </select>
+      </div>
+      <small ng-show="!vm.reservationValidity" class="text-danger">This date and time are already taken</small>
       <!--<label>Description</label>
       <input class="form-control" type="text" ng-model="vm.edition.description"/>
       <label>Body</label>
       <textarea class="form-control" ng-model="vm.edition.body"></textarea>-->
-      <button ng-click="vm.saveReservation()" class="btn btn-primary col-xs-12">Save</button>
+      <button ng-click="vm.saveReservation()" ng-disabled="!vm.reservationValidity" class="btn btn-primary col-xs-12">Save</button>
     </div>
     <div>
       <h5>Tags</h5>

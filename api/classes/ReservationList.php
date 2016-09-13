@@ -13,6 +13,7 @@ class ReservationList extends Reservation {
         $stmt->bindParam(':month', $month, PDO::PARAM_INT);
         $stmt->bindParam(':year', $year, PDO::PARAM_INT);
         $stmt->execute();
+        
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 

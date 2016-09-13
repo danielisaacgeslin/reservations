@@ -2,12 +2,13 @@
 	'use strict';
 	angular.module('app').controller('reservationController', reservationController);
 
-	reservationController.$inject = ['$scope', '$state', '$q', 'storeService'];
+	reservationController.$inject = ['$scope', '$state', '$q', 'storeService', 'ajaxService'];
 
-	function reservationController($scope, $state, $q, storeService) {
+	function reservationController($scope, $state, $q, storeService, ajaxService) {
 		var vm = this;
 		vm.reservation = {};
     vm.edition = {
+			title: null,
 			time: '1',
 			date: new Date()
 		};
@@ -20,6 +21,7 @@
 		vm.tempId = null;
 		vm.editEnabled = true;
 		vm.times = [1,2,3];
+		vm.reservationValidity = true;
 
     vm.toggleEdit = toggleEdit;
     vm.saveReservation = saveReservation;
@@ -29,6 +31,9 @@
     vm.deleteComment = deleteComment;
 		vm.setTag = setTag;
 		vm.deleteTag = deleteTag;
+
+		$scope.$watch('vm.edition.date', _checkValidity);
+		$scope.$watch('vm.edition.time', _checkValidity);
 
 		_activate();
     /*private functions*/
@@ -41,6 +46,20 @@
 					$q.all([_getReservationTagList(), _getTags()]).then(_filterTags);
 				});
       }
+		}
+
+		function _checkValidity(){
+			var day = vm.edition.date.getDate();
+			var month = vm.edition.date.getMonth() + 1;
+			var year = vm.edition.date.getFullYear();
+			var time = vm.edition.time;
+			if(!day || !month || !year || !time){
+				vm.reservationValidity = false;
+				return false;
+			}
+			ajaxService.reservationValidity(day, month, year, time).then(function(response){
+				vm.reservationValidity = response.data.payload;
+			});
 		}
 
     function _getReservation(){

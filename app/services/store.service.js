@@ -5,14 +5,15 @@
 	storeService.$inject = ['ajaxService', 'processService', '$q'];
 
 	function storeService(ajaxService, processService, $q) {
-    var reservations = {}, comments = {}, tags = {};
-		console.log(ajaxService);
+    var reservations = {}, comments = {}, tags = {}, currentUser = {};
+
 		return {
       getReservation: getReservation,
       getReservationList: getReservationList,
       getReservationTagList: getReservationTagList,
       getComments: getComments,
       getTags: getTags,
+			getCurrentUser: getCurrentUser,
 
       setReservation: setReservation,
       setTag: setTag,
@@ -24,8 +25,24 @@
 
       resetReservations: resetReservations,
       resetComments: resetComments,
-      resetTags: resetTags
+      resetTags: resetTags,
+			resetCurrentUser: resetCurrentUser
     };
+
+		function getCurrentUser(){
+			var defer = $q.defer();
+			var adapted = null;
+			if(currentUser.id){
+				defer.resolve(currentUser);
+			}else{
+				ajaxService.getCurrentUser().then(function(response){
+					adapted = processService.dbArrayAdapter([response.data.payload]);
+					currentUser = adapted[Object.keys(adapted)[0]];
+					defer.resolve(currentUser);
+				});
+			}
+			return defer.promise;
+		}
 
     function getReservation(reservationId){
       var defer = $q.defer();
@@ -176,6 +193,10 @@
 
     function resetComments(){
       comments = {};
+    }
+
+		function resetCurrentUser(){
+      currentUser = {};
     }
 
 	}

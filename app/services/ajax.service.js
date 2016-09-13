@@ -16,6 +16,8 @@
 			getComments: getComments, // reservation_id(int)
 			getTags: getTags, // N/A
 			logout: logout,
+			reservationValidity: reservationValidity,
+			getCurrentUser: getCurrentUser,
 			/*POST*/
 			saveReservation: saveReservation, // title(string), description(string), body(string), date(string), time(int)
 			updateReservation: updateReservation, // reservation_id, title, description, body, date, time
@@ -48,6 +50,18 @@
 
 		function logout(){
 			return $http.get(url.concat('?route=logout'));
+		}
+
+		function getCurrentUser(){
+			return $http.get(url.concat('?route=getCurrentUser'));
+		}
+
+		function reservationValidity(day, month, year, time){
+			return $http.get(url
+			.concat('?route=reservationValidity&day=').concat(day)
+			.concat('&month=').concat(month)
+			.concat('&year=').concat(year)
+			.concat('&time=').concat(time));
 		}
 
 		/*reservation_id(int)*/

@@ -37,11 +37,14 @@
 	'use strict';
 	angular.module('app').controller('appController', appController);
 
-	appController.$inject = ['$scope', '$state'];
+	appController.$inject = ['$scope', '$state', 'storeService', 'ajaxService'];
 
-	function appController($scope, $state) {
+	function appController($scope, $state, storeService, ajaxService) {
 		var vm = this;
     vm.route = null;
+		vm.currentUser = {};
+
+		vm.logout = logout;
 
     _activate();
 
@@ -50,14 +53,26 @@
 		/*private functions*/
 		function _activate(){
 			_updateRoute();
+			_getCurrentUser();
 		}
 
     function _updateRoute(){
       vm.route = $state.current.name;
     }
+
+		function _getCurrentUser(){
+			storeService.getCurrentUser().then(function(currentUser){
+				vm.currentUser = currentUser;
+			});
+		}
 		/*end private functions*/
 
 		/*public functions*/
+		function logout(){
+			ajaxService.logout().then(function(){
+				$state.reload();
+			});
+		}
 		/*end public functions*/
 	}
 })();
@@ -130,12 +145,13 @@
 	'use strict';
 	angular.module('app').controller('reservationController', reservationController);
 
-	reservationController.$inject = ['$scope', '$state', '$q', 'storeService'];
+	reservationController.$inject = ['$scope', '$state', '$q', 'storeService', 'ajaxService'];
 
-	function reservationController($scope, $state, $q, storeService) {
+	function reservationController($scope, $state, $q, storeService, ajaxService) {
 		var vm = this;
 		vm.reservation = {};
     vm.edition = {
+			title: null,
 			time: '1',
 			date: new Date()
 		};
@@ -148,6 +164,7 @@
 		vm.tempId = null;
 		vm.editEnabled = true;
 		vm.times = [1,2,3];
+		vm.reservationValidity = true;
 
     vm.toggleEdit = toggleEdit;
     vm.saveReservation = saveReservation;
@@ -157,6 +174,9 @@
     vm.deleteComment = deleteComment;
 		vm.setTag = setTag;
 		vm.deleteTag = deleteTag;
+
+		$scope.$watch('vm.edition.date', _checkValidity);
+		$scope.$watch('vm.edition.time', _checkValidity);
 
 		_activate();
     /*private functions*/
@@ -169,6 +189,20 @@
 					$q.all([_getReservationTagList(), _getTags()]).then(_filterTags);
 				});
       }
+		}
+
+		function _checkValidity(){
+			var day = vm.edition.date.getDate();
+			var month = vm.edition.date.getMonth() + 1;
+			var year = vm.edition.date.getFullYear();
+			var time = vm.edition.time;
+			if(!day || !month || !year || !time){
+				vm.reservationValidity = false;
+				return false;
+			}
+			ajaxService.reservationValidity(day, month, year, time).then(function(response){
+				vm.reservationValidity = response.data.payload;
+			});
 		}
 
     function _getReservation(){
@@ -506,6 +540,8 @@ require('./controllers/tags.controller');
 			getComments: getComments, // reservation_id(int)
 			getTags: getTags, // N/A
 			logout: logout,
+			reservationValidity: reservationValidity,
+			getCurrentUser: getCurrentUser,
 			/*POST*/
 			saveReservation: saveReservation, // title(string), description(string), body(string), date(string), time(int)
 			updateReservation: updateReservation, // reservation_id, title, description, body, date, time
@@ -538,6 +574,18 @@ require('./controllers/tags.controller');
 
 		function logout(){
 			return $http.get(url.concat('?route=logout'));
+		}
+
+		function getCurrentUser(){
+			return $http.get(url.concat('?route=getCurrentUser'));
+		}
+
+		function reservationValidity(day, month, year, time){
+			return $http.get(url
+			.concat('?route=reservationValidity&day=').concat(day)
+			.concat('&month=').concat(month)
+			.concat('&year=').concat(year)
+			.concat('&time=').concat(time));
 		}
 
 		/*reservation_id(int)*/
@@ -733,14 +781,15 @@ require('./controllers/tags.controller');
 	storeService.$inject = ['ajaxService', 'processService', '$q'];
 
 	function storeService(ajaxService, processService, $q) {
-    var reservations = {}, comments = {}, tags = {};
-		console.log(ajaxService);
+    var reservations = {}, comments = {}, tags = {}, currentUser = {};
+
 		return {
       getReservation: getReservation,
       getReservationList: getReservationList,
       getReservationTagList: getReservationTagList,
       getComments: getComments,
       getTags: getTags,
+			getCurrentUser: getCurrentUser,
 
       setReservation: setReservation,
       setTag: setTag,
@@ -752,8 +801,24 @@ require('./controllers/tags.controller');
 
       resetReservations: resetReservations,
       resetComments: resetComments,
-      resetTags: resetTags
+      resetTags: resetTags,
+			resetCurrentUser: resetCurrentUser
     };
+
+		function getCurrentUser(){
+			var defer = $q.defer();
+			var adapted = null;
+			if(currentUser.id){
+				defer.resolve(currentUser);
+			}else{
+				ajaxService.getCurrentUser().then(function(response){
+					adapted = processService.dbArrayAdapter([response.data.payload]);
+					currentUser = adapted[Object.keys(adapted)[0]];
+					defer.resolve(currentUser);
+				});
+			}
+			return defer.promise;
+		}
 
     function getReservation(reservationId){
       var defer = $q.defer();
@@ -904,6 +969,10 @@ require('./controllers/tags.controller');
 
     function resetComments(){
       comments = {};
+    }
+
+		function resetCurrentUser(){
+      currentUser = {};
     }
 
 	}

@@ -28,6 +28,14 @@ switch ($route) {
     case 'logout':
         response(OK, $user->logout());
         break;
+    case 'getCurrentUser':
+        response(OK, $_SESSION);
+        break;
+    case 'reservationValidity':
+        $reservation = new Reservation();
+        $result = $reservation->reservationValidity($_GET['day'], $_GET['month'], $_GET['year'], $_GET['time']);
+        ($result ? response(OK, true) : response(ERROR, false));
+        break;
     case 'getReservation':
         $reservation = new Reservation();
         response(OK, $reservation->getReservation($_GET['id']));
