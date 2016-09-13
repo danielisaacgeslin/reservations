@@ -22,11 +22,16 @@
 		}
 
     function _updateRoute(){
-      vm.route = $state.current.name;
+			_getCurrentUser().then(function(){
+				vm.route = $state.current.name;
+				if(!vm.currentUser.id && $state.current.name && $state.current.name !== '/login'){
+					$state.go('/login');
+				}
+			});
     }
 
 		function _getCurrentUser(){
-			storeService.getCurrentUser().then(function(currentUser){
+			return storeService.getCurrentUser().then(function(currentUser){
 				vm.currentUser = currentUser;
 			});
 		}
@@ -35,7 +40,9 @@
 		/*public functions*/
 		function logout(){
 			ajaxService.logout().then(function(){
-				$state.reload();
+				vm.currentUser = {};
+				storeService.resetCurrentUser();
+				$state.go('/login');
 			});
 		}
 		/*end public functions*/

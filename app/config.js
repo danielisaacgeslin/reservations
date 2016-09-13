@@ -10,6 +10,11 @@
 			templateUrl : 'main.html',
 			controller: 'mainController',
 			controllerAs: 'vm'
+		}).state('/login', {
+			url : '/login',
+      templateUrl : 'login.html',
+      controller: 'loginController',
+      controllerAs: 'vm'
 		}).state('/reservation', {
 			url : '/reservation/:id',
       templateUrl : 'reservation.html',

@@ -11,6 +11,11 @@
 			templateUrl : 'main.html',
 			controller: 'mainController',
 			controllerAs: 'vm'
+		}).state('/login', {
+			url : '/login',
+      templateUrl : 'login.html',
+      controller: 'loginController',
+      controllerAs: 'vm'
 		}).state('/reservation', {
 			url : '/reservation/:id',
       templateUrl : 'reservation.html',
@@ -57,11 +62,16 @@
 		}
 
     function _updateRoute(){
-      vm.route = $state.current.name;
+			_getCurrentUser().then(function(){
+				vm.route = $state.current.name;
+				if(!vm.currentUser.id && $state.current.name && $state.current.name !== '/login'){
+					$state.go('/login');
+				}
+			});
     }
 
 		function _getCurrentUser(){
-			storeService.getCurrentUser().then(function(currentUser){
+			return storeService.getCurrentUser().then(function(currentUser){
 				vm.currentUser = currentUser;
 			});
 		}
@@ -70,7 +80,9 @@
 		/*public functions*/
 		function logout(){
 			ajaxService.logout().then(function(){
-				$state.reload();
+				vm.currentUser = {};
+				storeService.resetCurrentUser();
+				$state.go('/login');
 			});
 		}
 		/*end public functions*/
@@ -78,6 +90,51 @@
 })();
 
 },{}],3:[function(require,module,exports){
+(function(){
+	'use strict';
+	angular.module('app').controller('loginController', loginController);
+
+	loginController.$inject = ['$scope', '$state', 'storeService', 'ajaxService'];
+
+	function loginController($scope, $state, storeService, ajaxService) {
+		var vm = this;
+    vm.status = null;
+    vm.username = null;
+    vm.password = null;
+
+    vm.login = login;
+
+    _activate();
+
+		/*private functions*/
+		function _activate(){
+      storeService.getCurrentUser().then(function(user){
+        if(user.id){
+          $state.go('/');
+        }
+      });
+		}
+
+		/*end private functions*/
+
+		/*public functions*/
+    function login(){
+      vm.status = null;
+      ajaxService.login(vm.username, vm.password).then(function(response){
+        if(response.data.status === 'ERROR'){
+          vm.status = response.data.payload;
+        }else{
+          storeService.getCurrentUser().then(function(user){
+            $state.go('/');
+          });
+        }
+      });
+    }
+		/*end public functions*/
+	}
+})();
+
+},{}],4:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').controller('mainController', mainController);
@@ -140,7 +197,7 @@
 	}
 })();
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').controller('reservationController', reservationController);
@@ -152,6 +209,8 @@
 		vm.reservation = {};
     vm.edition = {
 			title: null,
+			description: null,
+			body: null,
 			time: '1',
 			date: new Date()
 		};
@@ -165,6 +224,7 @@
 		vm.editEnabled = true;
 		vm.times = [1,2,3];
 		vm.reservationValidity = true;
+		vm.currentUser = {};
 
     vm.toggleEdit = toggleEdit;
     vm.saveReservation = saveReservation;
@@ -182,13 +242,19 @@
     /*private functions*/
 		function _activate(){
       if(isNaN($state.params.id)){
-				_getTags().then(_filterTags);
+				$q.all([_getCurrentUser(),_getTags()]).then(_filterTags);
       }else{
-        _getReservation().then(function(){
+        _getCurrentUser().then(_getReservation).then(function(){
 					_getComments();
 					$q.all([_getReservationTagList(), _getTags()]).then(_filterTags);
 				});
       }
+		}
+
+		function _getCurrentUser(){
+			return storeService.getCurrentUser().then(function(user){
+				vm.currentUser = user;
+			});
 		}
 
 		function _checkValidity(){
@@ -209,6 +275,7 @@
       return storeService.getReservation(vm.tempId ? vm.tempId : $state.params.id).then(function(reservation){
 				vm.reservation = reservation;
         vm.edition = Object.assign({},reservation);
+				vm.editEnabled = vm.currentUser.id === reservation.creation_user;
 			});
     }
 
@@ -320,7 +387,7 @@
 	}
 })();
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').controller('tagsController', tagsController);
@@ -346,7 +413,7 @@
 	}
 })();
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').directive('calendar', calendarDirective);
@@ -414,7 +481,7 @@
 	}
 })();
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').filter('department', departmentFilter);
@@ -454,7 +521,7 @@
 	}
 })();
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').filter('monthFilter', monthFilter);
@@ -472,7 +539,7 @@
 	}
 })();
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').filter('time', timeFilter);
@@ -500,7 +567,7 @@
 	}
 })();
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 require('./modules/app.module');
 require('./config');
 require('./services/process.service');
@@ -511,17 +578,18 @@ require('./filters/department.filter');
 require('./filters/month.filter');
 require('./directives/calendar.directive');
 require('./controllers/app.controller');
+require('./controllers/login.controller');
 require('./controllers/main.controller');
 require('./controllers/reservation.controller');
 require('./controllers/tags.controller');
 
-},{"./config":1,"./controllers/app.controller":2,"./controllers/main.controller":3,"./controllers/reservation.controller":4,"./controllers/tags.controller":5,"./directives/calendar.directive":6,"./filters/department.filter":7,"./filters/month.filter":8,"./filters/time.filter":9,"./modules/app.module":11,"./services/ajax.service":12,"./services/process.service":13,"./services/store.service":14}],11:[function(require,module,exports){
+},{"./config":1,"./controllers/app.controller":2,"./controllers/login.controller":3,"./controllers/main.controller":4,"./controllers/reservation.controller":5,"./controllers/tags.controller":6,"./directives/calendar.directive":7,"./filters/department.filter":8,"./filters/month.filter":9,"./filters/time.filter":10,"./modules/app.module":12,"./services/ajax.service":13,"./services/process.service":14,"./services/store.service":15}],12:[function(require,module,exports){
 (function(){
   'use strict';
   angular.module('app', ['ui.router','ngSanitize']);
 })();
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('ajaxService', ajaxService);
@@ -736,7 +804,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('processService', processService);
@@ -773,7 +841,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('storeService', storeService);
@@ -913,7 +981,7 @@ require('./controllers/tags.controller');
         });
       }else{
         ajaxService.saveComment(comment, reservationId).then(function(response){
-          newComment = {id: response.data.payload, text: comment, creation_timestamp: new Date()};
+          newComment = {id: response.data.payload, text: comment, creation_timestamp: new Date(), creation_user: currentUser.id};
 					comments[response.data.payload] = newComment;
 					reservations[reservationId].comments[response.data.payload] = newComment;
           defer.resolve(response);
@@ -978,4 +1046,4 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}]},{},[10]);
+},{}]},{},[11]);

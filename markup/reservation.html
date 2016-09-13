@@ -16,10 +16,17 @@
       <ul>
         <li class="alert alert-info" ng-repeat="(id, comment) in vm.reservation.comments">
           <p>
-            <a class="btn btn-primary delete" ng-click="vm.deleteComment(comment.id)">x</a>
-            <span>{{comment.creation_timestamp | date: 'dd/MM/y HH:mm'}} - </span>
-            <strong>{{comment.text}} </strong>
-            <a class="btn btn-default edit" ng-click="vm.editComment($index, comment.id)"><small>edit</small></a>
+            <div>
+              <a ng-show="vm.currentUser.id === comment.creation_user" class="text-success"
+              ng-click="vm.editComment($index, comment.id)"><strong>edit</strong></a>
+               <span ng-show="vm.currentUser.id === comment.creation_user"> - </span> 
+              <a ng-show="vm.currentUser.id === comment.creation_user"
+              ng-click="vm.deleteComment(comment.id)"><strong>delete</strong></a>
+            <div>
+            <strong>{{comment.floor}}° {{comment.department | department}} | {{comment.first_name}} {{comment.last_name}}</strong>
+            <span> | {{comment.creation_timestamp | date: 'dd/MM/y HH:mm'}}</span>
+            <br>
+            <strong class="comment-text">{{comment.text}} </strong>
             <div class="comment-edit" ng-if="vm.editableComment == $index">
               <textarea class="form-control" ng-model="vm.editableCommentText" type="text"></textarea>
               <button ng-click="vm.updateComment(comment.id)" class="btn btn-default">Save</button>

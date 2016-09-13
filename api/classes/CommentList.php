@@ -8,7 +8,9 @@ class CommentList extends Comment {
         }
         $link = Connection::connect();
 
-        $query = 'SELECT * FROM COMMENTS WHERE RESERVATION_ID = :reservation_id';
+        $query = 'SELECT A.*, B.FIRST_NAME, B.LAST_NAME, B.FLOOR, B.DEPARTMENT '
+                . 'FROM COMMENTS AS A INNER JOIN USERS AS B ON A.CREATION_USER = B.ID '
+                . 'WHERE A.RESERVATION_ID = :reservation_id';
 
         $stmt = $link->prepare($query);
         $stmt->bindParam(':reservation_id', $reservation_id, PDO::PARAM_INT);

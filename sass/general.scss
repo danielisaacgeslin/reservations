@@ -32,6 +32,10 @@ textarea {
   .content-edition {
     margin-bottom:15px;
   }
+  .comment-text {
+    display:block;
+    margin-top:5px;
+  }
   ul {
     margin:0;
     padding:0;
@@ -111,5 +115,25 @@ footer.well {
         }
       }
     }
+  }
+}
+
+#login {
+  margin-top:50px;
+  margin-bottom:50px;
+  input {
+    margin-top:25px;
+  }
+  button{
+    width:100%;
+    display: block;
+    margin-top:25px;
+  }
+  p {
+    padding-top:15px;
+  }
+  .panel-body {
+    padding-top:10px;
+    padding-bottom:25px;
   }
 }

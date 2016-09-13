@@ -9,6 +9,8 @@
 		vm.reservation = {};
     vm.edition = {
 			title: null,
+			description: null,
+			body: null,
 			time: '1',
 			date: new Date()
 		};
@@ -22,6 +24,7 @@
 		vm.editEnabled = true;
 		vm.times = [1,2,3];
 		vm.reservationValidity = true;
+		vm.currentUser = {};
 
     vm.toggleEdit = toggleEdit;
     vm.saveReservation = saveReservation;
@@ -39,13 +42,19 @@
     /*private functions*/
 		function _activate(){
       if(isNaN($state.params.id)){
-				_getTags().then(_filterTags);
+				$q.all([_getCurrentUser(),_getTags()]).then(_filterTags);
       }else{
-        _getReservation().then(function(){
+        _getCurrentUser().then(_getReservation).then(function(){
 					_getComments();
 					$q.all([_getReservationTagList(), _getTags()]).then(_filterTags);
 				});
       }
+		}
+
+		function _getCurrentUser(){
+			return storeService.getCurrentUser().then(function(user){
+				vm.currentUser = user;
+			});
 		}
 
 		function _checkValidity(){
@@ -66,6 +75,7 @@
       return storeService.getReservation(vm.tempId ? vm.tempId : $state.params.id).then(function(reservation){
 				vm.reservation = reservation;
         vm.edition = Object.assign({},reservation);
+				vm.editEnabled = vm.currentUser.id === reservation.creation_user;
 			});
     }
 

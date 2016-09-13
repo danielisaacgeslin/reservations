@@ -1,0 +1,17 @@
+<div class="row" id="login">
+  <div class="col-xs-12 col-md-6 col-md-offset-3">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h3 class="panel-title">Log In</h3>
+      </div>
+      <div class="panel-body">
+        <form>
+          <input class="form-control" placeholder="username" type="text" name="username" ng-model="vm.username" />
+          <input class="form-control" placeholder="password" type="password" name="password" ng-model="vm.password" />
+          <button class="btn btn-primary" ng-click="vm.login()">Log In</button>
+          <p class="text-primary text-center">{{vm.status}}</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

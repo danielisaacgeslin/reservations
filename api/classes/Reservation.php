@@ -5,13 +5,15 @@ class Reservation {
     public function reservationValidity($day, $month, $year, $time){
         $link = Connection::connect();
         $query = 'SELECT ID FROM RESERVATIONS WHERE '
-                . 'DAY(DATE) = :day AND MONTH(DATE) = :month AND YEAR(DATE) = :year AND TIME = :time';
+                . 'DAY(DATE) = :day AND MONTH(DATE) = :month AND YEAR(DATE) = :year AND TIME = :time '
+                . 'AND CREATION_USER != :user';
         $stmt = $link->prepare($query);
 
         $stmt->bindParam(':day', $day, PDO::PARAM_INT);
         $stmt->bindParam(':month', $month, PDO::PARAM_INT);
         $stmt->bindParam(':year', $year, PDO::PARAM_INT);
         $stmt->bindParam(':time', $time, PDO::PARAM_STR);
+        $stmt->bindParam(':user', $_SESSION['ID'], PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if($result){
