@@ -6,7 +6,7 @@
 
 	function storeService(ajaxService, processService, $q) {
     var reservations = {}, comments = {}, tags = {};
-
+		console.log(ajaxService);
 		return {
       getReservation: getReservation,
       getReservationList: getReservationList,

@@ -21,6 +21,6 @@
           break;
       }
       return output;
-    }
+    };
 	}
 })();

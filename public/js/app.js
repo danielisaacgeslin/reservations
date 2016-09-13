@@ -416,7 +416,7 @@
           break;
       }
       return output;
-    }
+    };
 	}
 })();
 
@@ -462,7 +462,7 @@
           break;
       }
       return output;
-    }
+    };
 	}
 })();
 
@@ -505,21 +505,39 @@ require('./controllers/tags.controller');
 			getReservationTagList: getReservationTagList, // reservation_id(int)
 			getComments: getComments, // reservation_id(int)
 			getTags: getTags, // N/A
+			logout: logout,
 			/*POST*/
 			saveReservation: saveReservation, // title(string), description(string), body(string), date(string), time(int)
-			updateReservation: updateReservation, // reservation_id(int), title(string), description(string), body(string), date(string), time(int)
+			updateReservation: updateReservation, // reservation_id, title, description, body, date, time
 			deleteReservation: deleteReservation, // reservation_id(int)
 			addTag: addTag, // reservation_id(int), tag_id(int)
 			removeTag: removeTag, // reservation_id(int), tag_id(int)
 			saveComment: saveComment, // comment(string), reservation_id(int)
 			deleteComment: deleteComment, // comment_id(int)
 			updateComment: updateComment, // comment_id(int), comment(string)
-			saveTag: saveTag // tag(string)
+			saveTag: saveTag, // tag(string)
+			login: login
 		};
 
 		/*N/A*/
 		function ping(){
 			return $http.get(url.concat('?route=ping'));
+		}
+
+		function login(username, password){
+			return $http({
+				url:url.concat('?route=login'),
+				method: 'POST',
+				headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+				data:$httpParamSerializerJQLike({
+					username:username,
+					password:password
+				})
+			});
+		}
+
+		function logout(){
+			return $http.get(url.concat('?route=logout'));
 		}
 
 		/*reservation_id(int)*/
@@ -716,7 +734,7 @@ require('./controllers/tags.controller');
 
 	function storeService(ajaxService, processService, $q) {
     var reservations = {}, comments = {}, tags = {};
-
+		console.log(ajaxService);
 		return {
       getReservation: getReservation,
       getReservationList: getReservationList,

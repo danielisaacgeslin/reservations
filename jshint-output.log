@@ -1,5 +1,5 @@
 
-3 lint errors found in app\controllers\article.controller.js
-  [11,23](W033) Missing semicolon.
-  [12,28](W033) Missing semicolon.
-  [13,32](W033) Missing semicolon.
+1 lint errors found in app\filters\department.filter.js
+  [36,6](W033) Missing semicolon.
+1 lint errors found in app\services\ajax.service.js
+  [20,147](W101) Line is too long.
