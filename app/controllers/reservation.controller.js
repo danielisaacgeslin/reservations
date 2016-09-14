@@ -50,6 +50,9 @@
 				$q.all([_getCurrentUser(),_getTags()]).then(_filterTags);
       }else{
         _getCurrentUser().then(_getReservation).then(function(){
+					if(!isNaN($state.params.id)){
+						return false;
+					}
 					vm.ableToCheckVailidity = true;
 					_getComments();
 					_checkValidity();
@@ -101,6 +104,11 @@
 
     function _getReservation(){
       return storeService.getReservation(vm.tempId ? vm.tempId : $state.params.id).then(function(reservation){
+				if(!reservation){
+					$state.go('/reservation',{id:'new', date: Date.now()});
+					storeService.resetReservations();
+					return false;
+				}
 				vm.reservation = reservation;
         vm.edition = Object.assign({},reservation);
 				vm.editEnabled = vm.currentUser.id === reservation.creation_user;
