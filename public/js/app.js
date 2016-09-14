@@ -147,6 +147,7 @@
 		vm.date = new Date();
 		vm.reservations = {};
 		vm.reservationCount = 0;
+		vm.currentUser = {};
 
 		vm.deleteReservation = deleteReservation;
 		vm.switchVisualization = switchVisualization;
@@ -159,6 +160,9 @@
 		/*private functions*/
 		function _activate(){
 			_getReservationList();
+			storeService.getCurrentUser().then(function(user){
+				vm.currentUser = user;
+			});
 		}
 
 		function _getReservationList(){
@@ -446,14 +450,16 @@
       scope: {
           data: '=',
 					date: '=',
-					count: '='
+					count: '=',
+					user: '=',
+					delete: '='
       }
     };
 
     function link($scope){
 			$scope.days = [];
 
-			$scope.$watch('data', _updateCalendar);
+			$scope.$watch('data', _updateCalendar, true);
 
       /*private functions*/
 			function _updateCalendar(){

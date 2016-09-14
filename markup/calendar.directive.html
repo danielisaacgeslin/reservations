@@ -8,12 +8,9 @@
         </h3>
       </div>
       <div class="panel-body">
-        <p ng-repeat="item in day.items track by item.id">
-          <a class="label label-info" href="#/reservation/{{item.id}}">
-            <span>{{item.floor}}° {{item.department | department}}</span>
-             | {{item.time | time}}
-            <!--<small class="pull-right">({{item.first_name}} {{item.last_name}})</small>-->
-          </a>
+        <p class="label label-info" ng-repeat="item in day.items track by item.id">
+          <a class="pull-left" href="#/reservation/{{item.id}}">{{item.floor}}° {{item.department | department}} | {{item.time | time}}</a>
+          <a class="pull-right" ng-show="item.creation_user === user.id" ng-click="delete(item.id)">delete</a>
         </p>
       </div>
     </article>

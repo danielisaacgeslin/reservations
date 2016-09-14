@@ -10,6 +10,7 @@
 		vm.date = new Date();
 		vm.reservations = {};
 		vm.reservationCount = 0;
+		vm.currentUser = {};
 
 		vm.deleteReservation = deleteReservation;
 		vm.switchVisualization = switchVisualization;
@@ -22,6 +23,9 @@
 		/*private functions*/
 		function _activate(){
 			_getReservationList();
+			storeService.getCurrentUser().then(function(user){
+				vm.currentUser = user;
+			});
 		}
 
 		function _getReservationList(){

@@ -104,14 +104,17 @@ footer.well {
       min-height:120px;
       margin: 0;
       .panel-body {
-        padding:3px;
+        padding:4px;
         p {
-          margin:4px;
+          float:left;
+          width:100%;
+          margin:2px 0;
+          padding:5px;
+          display:block;
         }
         a {
-          display:block;
           text-align: left;
-          padding:5px;
+          color: inherit;
         }
       }
     }

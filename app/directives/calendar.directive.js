@@ -12,14 +12,16 @@
       scope: {
           data: '=',
 					date: '=',
-					count: '='
+					count: '=',
+					user: '=',
+					delete: '='
       }
     };
 
     function link($scope){
 			$scope.days = [];
 
-			$scope.$watch('data', _updateCalendar);
+			$scope.$watch('data', _updateCalendar, true);
 
       /*private functions*/
 			function _updateCalendar(){

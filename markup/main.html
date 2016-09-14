@@ -14,7 +14,11 @@
       </div>
       <div class="col-md-4 col-xs-12"><button class="btn btn-primary pull-right" ng-click="vm.next()">Next</button></div>
     </div>
-    <calendar ng-if="vm.visualization === 'calendar'" date="vm.date" data="vm.reservations" count="vm.reservationCount"></calendar>
+    <calendar ng-if="vm.visualization === 'calendar'"
+              user="vm.currentUser"
+              delete='vm.deleteReservation'
+              date="vm.date" data="vm.reservations"
+              count="vm.reservationCount"></calendar>
     <table ng-if="vm.visualization === 'table'" class="table table-striped">
       <thead>
         <tr>
@@ -39,7 +43,7 @@
           <td>{{reservation.time | time}}</td>
           <td>{{reservation.title}}</td>
           <td>{{reservation.creation_timestamp | date: 'dd/MM/y HH:mm'}}</td>
-          <td><a ng-click="vm.deleteReservation(reservation.id)">delete</a></td>
+          <td><a ng-show="vm.currentUser.id === reservation.creation_user" ng-click="vm.deleteReservation(reservation.id)">delete</a></td>
           <td><a ng-href="#/reservation/{{reservation.id}}">details</a></td>
         </tr>
       </tbody>
