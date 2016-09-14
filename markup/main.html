@@ -17,7 +17,8 @@
     <calendar ng-if="vm.visualization === 'calendar'"
               user="vm.currentUser"
               delete='vm.deleteReservation'
-              date="vm.date" data="vm.reservations"
+              date="vm.date"
+              data="vm.reservations"
               count="vm.reservationCount"></calendar>
     <table ng-if="vm.visualization === 'table'" class="table table-striped">
       <thead>

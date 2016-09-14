@@ -34,7 +34,8 @@ switch ($route) {
     case 'reservationValidity':
         $reservation = new Reservation();
         $result = $reservation->reservationValidity($_GET['day'], $_GET['month'], $_GET['year'], $_GET['time']);
-        ($result ? response(OK, true) : response(ERROR, false));
+        
+        response(OK, $result);
         break;
     case 'getReservation':
         $reservation = new Reservation();
@@ -67,8 +68,7 @@ switch ($route) {
         break;
     case 'getReservationList':
         $reservationList = new ReservationList();
-        $result = $reservationList->getReservationList($_GET['month'], $_GET['year']);
-        ($result ? response(OK, $result) : response(ERROR, ""));
+        response(OK,$reservationList->getReservationList($_GET['month'], $_GET['year']));
         break;
     case 'saveComment':
         $comment = new Comment();
@@ -87,8 +87,7 @@ switch ($route) {
         break;
     case 'getComments':
         $commentList = new CommentList();
-        $result = $commentList->getCommentList($_GET['reservation_id']);
-        ($result ? response(OK, $result) : response(ERROR, ""));
+        response(OK,$commentList->getCommentList($_GET['reservation_id']));
         break;
     case 'saveTag':
         $tag = new Tag();
@@ -97,8 +96,7 @@ switch ($route) {
         break;
     case 'getReservationTagList':
         $tagList = new TagList();
-        $result = $tagList->getTagList($_GET['reservation_id']);
-        ($result ? response(OK, $result) : response(ERROR, ""));
+        response(OK,$tagList->getTagList($_GET['reservation_id']));
         break;
     case 'getTags':
         $tagList = new TagList();

@@ -3,7 +3,9 @@
 
 	angular.module('app').config(config).constant('constants',constants());
 
-	function config($stateProvider, $urlRouterProvider){
+	function config($stateProvider, $urlRouterProvider, $httpProvider){
+		$httpProvider.interceptors.push('interceptor');
+
 		$urlRouterProvider.otherwise('/');
 		$stateProvider.state('/', {
 			url : '/',
@@ -30,7 +32,10 @@
 
 	function constants(){
 		return {
-			serviceUrl: '/reservations/api/'
+			serviceUrl: '/reservations/api/',
+			genericErrorMessage: 'An error has occurred',
+			genericSuccessMessage: 'Operation successfully achieved',
+			toasterTime: 3000
 		};
 	}
 

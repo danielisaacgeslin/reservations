@@ -2,9 +2,9 @@
 	'use strict';
 	angular.module('app').controller('reservationController', reservationController);
 
-	reservationController.$inject = ['$scope', '$state', '$q', 'storeService', 'ajaxService'];
+	reservationController.$inject = ['$scope', '$rootScope', '$state', '$q', 'storeService', 'ajaxService'];
 
-	function reservationController($scope, $state, $q, storeService, ajaxService) {
+	function reservationController($scope, $rootScope, $state, $q, storeService, ajaxService) {
 		var vm = this;
 		vm.reservation = {};
     vm.edition = {
@@ -38,7 +38,7 @@
 
 		$scope.$watch('vm.edition.date', _checkValidity);
 		$scope.$watch('vm.edition.time', _checkValidity);
-		
+
 		_activate();
     /*private functions*/
 		function _activate(){
@@ -53,6 +53,13 @@
 					$q.all([_getReservationTagList(), _getTags()]).then(_filterTags);
 				});
       }
+		}
+
+		function _toastSuccess(){
+			var defer = $q.defer();
+			$rootScope.$broadcast('OK', '');
+			defer.resolve();
+			return defer.promise;
 		}
 
 		function _getCurrentUser(){
@@ -153,7 +160,7 @@
 					    inherit:true
 					});
         }
-      });
+      }).then(_toastSuccess);
 		}
     /*end private functions*/
 
@@ -172,7 +179,7 @@
     function saveComment(){
       return storeService.setComment(vm.newComment, vm.reservation.id).then(function(){
         vm.newComment = '';
-      });
+      }).then(_toastSuccess);
     }
 
     function updateComment(commentId){
@@ -190,15 +197,18 @@
     }
 
     function deleteComment(commentId){
-      return storeService.deleteComment(commentId, vm.reservation.id);
+      return storeService.deleteComment(commentId, vm.reservation.id).then(_toastSuccess);
     }
 
 		function setTag(){
-			storeService.setTag(vm.reservation.id, vm.selectedTag.id).then(_getReservationTagList).then(_filterTags);
+			storeService.setTag(vm.reservation.id, vm.selectedTag.id)
+			.then(_toastSuccess)
+			.then(_getReservationTagList)
+			.then(_filterTags);
 		}
 
 		function deleteTag(tagId){
-			return storeService.deleteTag(vm.reservation.id, tagId).then(_filterTags);
+			return storeService.deleteTag(vm.reservation.id, tagId).then(_toastSuccess).then(_filterTags);
 		}
     /*end public functions*/
 

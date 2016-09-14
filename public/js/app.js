@@ -4,7 +4,9 @@
 
 	angular.module('app').config(config).constant('constants',constants());
 
-	function config($stateProvider, $urlRouterProvider){
+	function config($stateProvider, $urlRouterProvider, $httpProvider){
+		$httpProvider.interceptors.push('interceptor');
+
 		$urlRouterProvider.otherwise('/');
 		$stateProvider.state('/', {
 			url : '/',
@@ -31,7 +33,10 @@
 
 	function constants(){
 		return {
-			serviceUrl: '/reservations/api/'
+			serviceUrl: '/reservations/api/',
+			genericErrorMessage: 'An error has occurred',
+			genericSuccessMessage: 'Operation successfully achieved',
+			toasterTime: 3000
 		};
 	}
 
@@ -42,23 +47,38 @@
 	'use strict';
 	angular.module('app').controller('appController', appController);
 
-	appController.$inject = ['$scope', '$state', 'storeService', 'ajaxService'];
+	appController.$inject = ['$scope', '$state', 'storeService', 'ajaxService', 'constants'];
 
-	function appController($scope, $state, storeService, ajaxService) {
+	function appController($scope, $state, storeService, ajaxService, constants) {
 		var vm = this;
     vm.route = null;
 		vm.currentUser = {};
+		vm.toasterData = {};
 
 		vm.logout = logout;
 
     _activate();
 
     $scope.$watch(function(){return $state.current;}, _updateRoute);
+		$scope.$on('ERROR', _toastError);
+		$scope.$on('OK', _toastSuccess);
 
 		/*private functions*/
 		function _activate(){
 			_updateRoute();
 			_getCurrentUser();
+		}
+
+		function _toastError(e,data){
+			var type = e.name;
+			var message = data ? data : constants.genericErrorMessage;
+			vm.toasterData = {type: type, message: message};
+		}
+
+		function _toastSuccess(e,data){
+			var type = e.name;
+			var message = data ? data : constants.genericSuccessMessage;
+			vm.toasterData = {type: type, message: message};
 		}
 
     function _updateRoute(){
@@ -139,9 +159,9 @@
 	'use strict';
 	angular.module('app').controller('mainController', mainController);
 
-	mainController.$inject = ['$scope', 'storeService'];
+	mainController.$inject = ['$scope', '$q', '$rootScope', 'storeService'];
 
-	function mainController($scope, storeService) {
+	function mainController($scope, $q, $rootScope, storeService) {
 		var vm = this;
 		vm.visualization = 'calendar';
 		vm.date = new Date();
@@ -165,6 +185,13 @@
 			});
 		}
 
+		function _toastSuccess(){
+			var defer = $q.defer();
+			$rootScope.$broadcast('OK', '');
+			defer.resolve();
+			return defer.promise;
+		}
+
 		function _getReservationList(){
 			var month = vm.date.getMonth() + 1;
 			var year = vm.date.getFullYear();
@@ -177,7 +204,9 @@
 
 		/*public functions*/
 		function deleteReservation(articleId){
-			storeService.deleteReservation(articleId);
+			storeService.deleteReservation(articleId).then(_toastSuccess).then(function(){
+				$scope.$broadcast('updateCalendar');
+			});
 		}
 
 		function switchVisualization(visualization){
@@ -206,9 +235,9 @@
 	'use strict';
 	angular.module('app').controller('reservationController', reservationController);
 
-	reservationController.$inject = ['$scope', '$state', '$q', 'storeService', 'ajaxService'];
+	reservationController.$inject = ['$scope', '$rootScope', '$state', '$q', 'storeService', 'ajaxService'];
 
-	function reservationController($scope, $state, $q, storeService, ajaxService) {
+	function reservationController($scope, $rootScope, $state, $q, storeService, ajaxService) {
 		var vm = this;
 		vm.reservation = {};
     vm.edition = {
@@ -242,7 +271,7 @@
 
 		$scope.$watch('vm.edition.date', _checkValidity);
 		$scope.$watch('vm.edition.time', _checkValidity);
-		
+
 		_activate();
     /*private functions*/
 		function _activate(){
@@ -257,6 +286,13 @@
 					$q.all([_getReservationTagList(), _getTags()]).then(_filterTags);
 				});
       }
+		}
+
+		function _toastSuccess(){
+			var defer = $q.defer();
+			$rootScope.$broadcast('OK', '');
+			defer.resolve();
+			return defer.promise;
 		}
 
 		function _getCurrentUser(){
@@ -357,7 +393,7 @@
 					    inherit:true
 					});
         }
-      });
+      }).then(_toastSuccess);
 		}
     /*end private functions*/
 
@@ -376,7 +412,7 @@
     function saveComment(){
       return storeService.setComment(vm.newComment, vm.reservation.id).then(function(){
         vm.newComment = '';
-      });
+      }).then(_toastSuccess);
     }
 
     function updateComment(commentId){
@@ -394,15 +430,18 @@
     }
 
     function deleteComment(commentId){
-      return storeService.deleteComment(commentId, vm.reservation.id);
+      return storeService.deleteComment(commentId, vm.reservation.id).then(_toastSuccess);
     }
 
 		function setTag(){
-			storeService.setTag(vm.reservation.id, vm.selectedTag.id).then(_getReservationTagList).then(_filterTags);
+			storeService.setTag(vm.reservation.id, vm.selectedTag.id)
+			.then(_toastSuccess)
+			.then(_getReservationTagList)
+			.then(_filterTags);
 		}
 
 		function deleteTag(tagId){
-			return storeService.deleteTag(vm.reservation.id, tagId).then(_filterTags);
+			return storeService.deleteTag(vm.reservation.id, tagId).then(_toastSuccess).then(_filterTags);
 		}
     /*end public functions*/
 
@@ -459,7 +498,8 @@
     function link($scope){
 			$scope.days = [];
 
-			$scope.$watch('data', _updateCalendar, true);
+			$scope.$watch('data', _updateCalendar);
+			$scope.$on('updateCalendar',_updateCalendar);
 
       /*private functions*/
 			function _updateCalendar(){
@@ -508,6 +548,47 @@
 },{}],8:[function(require,module,exports){
 (function(){
 	'use strict';
+	angular.module('app').directive('toaster', toaster);
+
+  toaster.$inject = ['constants'];
+
+	function toaster(constants) {
+    return {
+      restrict: 'E',
+      templateUrl: 'toaster.directive.html',
+      link: link,
+      scope: {
+        data: '='
+      }
+    };
+
+    function link($scope, $element, $attr){
+      var timeout = 0;
+
+      $scope.$watch('data',_toast);
+      
+      /*private functions*/
+      function _toast(){
+        if(!$scope.data.type){
+          return false;
+        }
+        clearTimeout(timeout);
+        timeout = setTimeout(function(){
+          $scope.data = {};
+          $scope.$digest();
+        }, constants.toasterTime);
+      }
+      /*end private functions*/
+
+      /*public functions*/
+      /*end public functions*/
+    }
+	}
+})();
+
+},{}],9:[function(require,module,exports){
+(function(){
+	'use strict';
 	angular.module('app').filter('department', departmentFilter);
 
 	function departmentFilter() {
@@ -545,7 +626,7 @@
 	}
 })();
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').filter('monthFilter', monthFilter);
@@ -563,7 +644,7 @@
 	}
 })();
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').filter('time', timeFilter);
@@ -577,10 +658,10 @@
           output = 'Morning';
           break;
         case '2':
-          output = 'Afternoon';
+          output = 'Evening';
           break;
         case '3':
-          output = 'Evening';
+          output = 'Afternoon';
           break;
         default:
           output = '';
@@ -591,15 +672,17 @@
 	}
 })();
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 require('./modules/app.module');
 require('./config');
+require('./services/interceptor.service');
 require('./services/process.service');
 require('./services/ajax.service');
 require('./services/store.service');
 require('./filters/time.filter');
 require('./filters/department.filter');
 require('./filters/month.filter');
+require('./directives/toaster.directive');
 require('./directives/calendar.directive');
 require('./controllers/app.controller');
 require('./controllers/login.controller');
@@ -607,13 +690,13 @@ require('./controllers/main.controller');
 require('./controllers/reservation.controller');
 require('./controllers/tags.controller');
 
-},{"./config":1,"./controllers/app.controller":2,"./controllers/login.controller":3,"./controllers/main.controller":4,"./controllers/reservation.controller":5,"./controllers/tags.controller":6,"./directives/calendar.directive":7,"./filters/department.filter":8,"./filters/month.filter":9,"./filters/time.filter":10,"./modules/app.module":12,"./services/ajax.service":13,"./services/process.service":14,"./services/store.service":15}],12:[function(require,module,exports){
+},{"./config":1,"./controllers/app.controller":2,"./controllers/login.controller":3,"./controllers/main.controller":4,"./controllers/reservation.controller":5,"./controllers/tags.controller":6,"./directives/calendar.directive":7,"./directives/toaster.directive":8,"./filters/department.filter":9,"./filters/month.filter":10,"./filters/time.filter":11,"./modules/app.module":13,"./services/ajax.service":14,"./services/interceptor.service":15,"./services/process.service":16,"./services/store.service":17}],13:[function(require,module,exports){
 (function(){
   'use strict';
   angular.module('app', ['ui.router','ngSanitize']);
 })();
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('ajaxService', ajaxService);
@@ -828,7 +911,46 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
+(function(){
+	'use strict';
+	angular.module('app').factory('interceptor', interceptor);
+
+	interceptor.$inject = ['$q','$rootScope'];
+
+	function interceptor($q, $rootScope) {
+		return {
+      request: request,
+      requestError: requestError,
+      response: response,
+      responseError: responseError
+    };
+
+    function request(config){
+      return config;
+    }
+
+    function requestError(rejection){
+      return $q.reject(rejection);
+    }
+
+    function response(response){
+      if(response.data.status === 'ERROR'){
+        $rootScope.$broadcast('ERROR', response.data.payload);
+        return $q.reject(response);
+      }
+      return response;
+    }
+
+    function responseError(rejection){
+      $rootScope.$broadcast('ERROR', '');
+      return $q.reject(rejection);
+    }
+
+	}
+})();
+
+},{}],16:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('processService', processService);
@@ -865,7 +987,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],15:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('storeService', storeService);
@@ -1077,4 +1199,4 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}]},{},[11]);
+},{}]},{},[12]);

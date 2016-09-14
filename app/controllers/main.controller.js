@@ -2,9 +2,9 @@
 	'use strict';
 	angular.module('app').controller('mainController', mainController);
 
-	mainController.$inject = ['$scope', 'storeService'];
+	mainController.$inject = ['$scope', '$q', '$rootScope', 'storeService'];
 
-	function mainController($scope, storeService) {
+	function mainController($scope, $q, $rootScope, storeService) {
 		var vm = this;
 		vm.visualization = 'calendar';
 		vm.date = new Date();
@@ -28,6 +28,13 @@
 			});
 		}
 
+		function _toastSuccess(){
+			var defer = $q.defer();
+			$rootScope.$broadcast('OK', '');
+			defer.resolve();
+			return defer.promise;
+		}
+
 		function _getReservationList(){
 			var month = vm.date.getMonth() + 1;
 			var year = vm.date.getFullYear();
@@ -40,7 +47,9 @@
 
 		/*public functions*/
 		function deleteReservation(articleId){
-			storeService.deleteReservation(articleId);
+			storeService.deleteReservation(articleId).then(_toastSuccess).then(function(){
+				$scope.$broadcast('updateCalendar');
+			});
 		}
 
 		function switchVisualization(visualization){

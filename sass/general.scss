@@ -1,6 +1,10 @@
 /*general*/
 .transition {transition:All 0.2s ease-in-out; -webkit-transition:All 0.2s ease-in-out; -moz-transition:All 0.2s ease-in-out; -o-transition:All 0.2s ease-in-out;}
 
+body {
+  position:relative;
+}
+
 a {
   cursor:pointer;
 }
@@ -138,5 +142,14 @@ footer.well {
   .panel-body {
     padding-top:10px;
     padding-bottom:25px;
+  }
+}
+
+.toaster {
+  position:fixed;
+  bottom: 15px;
+  right:15px;
+  .alert {
+    margin:0;
   }
 }

@@ -21,7 +21,8 @@
     function link($scope){
 			$scope.days = [];
 
-			$scope.$watch('data', _updateCalendar, true);
+			$scope.$watch('data', _updateCalendar);
+			$scope.$on('updateCalendar',_updateCalendar);
 
       /*private functions*/
 			function _updateCalendar(){

@@ -11,10 +11,10 @@
           output = 'Morning';
           break;
         case '2':
-          output = 'Afternoon';
+          output = 'Evening';
           break;
         case '3':
-          output = 'Evening';
+          output = 'Afternoon';
           break;
         default:
           output = '';

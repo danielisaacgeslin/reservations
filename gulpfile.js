@@ -13,13 +13,13 @@ var runSequence = require('run-sequence');
 
 /*usable from terminal*/
 gulp.task('default', function(){
-  runSequence('build', 'watch', 'connect');
+  runSequence('dev');
 });
 
-gulp.task('dev', ['connect','watch']);
+gulp.task('dev', ['build','connect', 'watch']);
 
 gulp.task('build', function(){
-  runSequence('build-main','libs','build-app','build-css','minify-html','images');
+  runSequence('build-main','libs','build-app','build-css','minify-html','images','fonts');
 });
 
 /*end usable from terminal*/
@@ -100,6 +100,11 @@ gulp.task('minify-html', function() {
   return gulp.src('./markup/**/*.html')
     .pipe(htmlmin({collapseWhitespace: true}))
     .pipe(gulp.dest('./public/'));
+});
+
+gulp.task('fonts', function(){
+  return gulp.src('./fonts/**/*.*')
+  .pipe(gulp.dest('./public/fonts'));
 });
 
 gulp.task('build-app', function(){

@@ -87,12 +87,20 @@ class Reservation {
     public function deleteReservation($id) {
         $link = Connection::connect();
         $user = $_SESSION["ID"];
-        
         /* deleting comments */
         $query = 'DELETE FROM COMMENTS WHERE RESERVATION_ID = :id';
 
         $stmt = $link->prepare($query);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        $stmt->execute();
+        
+        /* deleting tag list */
+        $query = 'DELETE FROM TAG_LISTS WHERE RESERVATION_ID = :id AND CREATION_USER = :user';
+
+        $stmt = $link->prepare($query);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':user', $user, PDO::PARAM_INT);
 
         $stmt->execute();
         
@@ -106,17 +114,6 @@ class Reservation {
         $stmt->execute();
         
         $result = $stmt->rowCount();
-
-        /* deleting tag list */
-        $query = 'DELETE FROM TAG_LISTS WHERE RESERVATION_ID = :id AND CREATION_USER = :user';
-
-        $stmt = $link->prepare($query);
-        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':user', $user, PDO::PARAM_INT);
-
-        $stmt->execute();
-        
-        
 
         if ($result) {
             return true;

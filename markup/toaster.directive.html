@@ -1,0 +1,7 @@
+<div ng-show="data.type" class="toaster">
+  <div class="alert" ng-class="{'alert-danger': data.type === 'ERROR', 'alert-success': data.type === 'OK'}">
+    <span ng-show="data.type === 'ERROR'" class="glyphicon glyphicon-exclamation-sign"></span>
+    <span ng-show="data.type === 'OK'" class="glyphicon glyphicon-ok"></span>
+    {{data.message}}
+  </div>
+</div>

@@ -6,7 +6,7 @@
 	<link href="css/style.css" rel="stylesheet" type="text/css">
 	<script src="js/main.js" type="text/javascript"></script>
 </head>
-<body ng-controller="appController as vm">
+<body ng-controller="appController as vm" ng-cloak>
 
 	<header ng-include="'header.html'"></header>
 
@@ -24,6 +24,8 @@
 			</div>
 		</div>
 	</footer>
+
+	<toaster data="vm.toasterData"></toaster>
 
 	<script src="js/app.js" type="text/javascript"></script>
 </body>
