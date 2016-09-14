@@ -137,7 +137,14 @@
         });
       }else{
         ajaxService.saveComment(comment, reservationId).then(function(response){
-          newComment = {id: response.data.payload, text: comment, creation_timestamp: new Date(), creation_user: currentUser.id};
+          newComment = {
+						id: response.data.payload,
+						text: comment,
+						creation_timestamp: new Date(),
+						creation_user: currentUser.id,
+						floor: currentUser.floor,
+						department: currentUser.department
+					};
 					comments[response.data.payload] = newComment;
 					reservations[reservationId].comments[response.data.payload] = newComment;
           defer.resolve(response);

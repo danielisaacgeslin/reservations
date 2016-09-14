@@ -34,18 +34,22 @@
     vm.deleteComment = deleteComment;
 		vm.setTag = setTag;
 		vm.deleteTag = deleteTag;
+		vm.ableToCheckVailidity = false;
 
 		$scope.$watch('vm.edition.date', _checkValidity);
 		$scope.$watch('vm.edition.time', _checkValidity);
-
+		
 		_activate();
     /*private functions*/
 		function _activate(){
       if(isNaN($state.params.id)){
+				vm.ableToCheckVailidity = true;
 				$q.all([_getCurrentUser(),_getTags()]).then(_filterTags);
       }else{
         _getCurrentUser().then(_getReservation).then(function(){
+					vm.ableToCheckVailidity = true;
 					_getComments();
+					_checkValidity();
 					$q.all([_getReservationTagList(), _getTags()]).then(_filterTags);
 				});
       }
@@ -62,10 +66,24 @@
 			var month = vm.edition.date.getMonth() + 1;
 			var year = vm.edition.date.getFullYear();
 			var time = vm.edition.time;
+
+			if(!vm.ableToCheckVailidity){
+				return false;
+			}
+
+			if(vm.edition.date &&
+				 vm.reservation.date &&
+				 vm.edition.date.getTime() === vm.reservation.date.getTime() &&
+				 vm.edition.time === vm.reservation.time){
+				vm.reservationValidity = true;
+				return true;
+			}
+
 			if(!day || !month || !year || !time){
 				vm.reservationValidity = false;
 				return false;
 			}
+
 			ajaxService.reservationValidity(day, month, year, time).then(function(response){
 				vm.reservationValidity = response.data.payload;
 			});

@@ -19,7 +19,7 @@
             <div>
               <a ng-show="vm.currentUser.id === comment.creation_user" class="text-success"
               ng-click="vm.editComment($index, comment.id)"><strong>edit</strong></a>
-               <span ng-show="vm.currentUser.id === comment.creation_user"> - </span> 
+               <span ng-show="vm.currentUser.id === comment.creation_user"> - </span>
               <a ng-show="vm.currentUser.id === comment.creation_user"
               ng-click="vm.deleteComment(comment.id)"><strong>delete</strong></a>
             <div>
