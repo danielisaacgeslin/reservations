@@ -288,7 +288,7 @@
 				$q.all([_getCurrentUser(),_getTags()]).then(_filterTags);
       }else{
         _getCurrentUser().then(_getReservation).then(function(){
-					if(!isNaN($state.params.id)){
+					if(!vm.reservation || !vm.reservation.id){
 						return false;
 					}
 					vm.ableToCheckVailidity = true;
