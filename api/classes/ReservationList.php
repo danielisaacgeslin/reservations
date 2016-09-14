@@ -7,7 +7,7 @@ class ReservationList extends Reservation {
 
         $query = 'SELECT A.*, B.FLOOR, B.DEPARTMENT, B.FIRST_NAME, B.LAST_NAME FROM RESERVATIONS AS A '
                 . 'INNER JOIN USERS AS B ON A.CREATION_USER = B.ID '
-                . 'WHERE MONTH(A.DATE) = :month AND YEAR(A.DATE) = :year ORDER BY A.DATE, A.TIME';
+                . 'WHERE MONTH(A.DATE) = :month AND YEAR(A.DATE) = :year ORDER BY DAY(A.DATE) ASC, A.TIME ASC';
 
         $stmt = $link->prepare($query);
         $stmt->bindParam(':month', $month, PDO::PARAM_INT);

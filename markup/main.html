@@ -42,7 +42,7 @@
           <td>{{reservation.floor}}° {{reservation.department | department}}</td>
           <td>{{reservation.first_name}} {{reservation.last_name}}</td>
           <td>{{reservation.time | time}}</td>
-          <td>{{reservation.title}}</td>
+          <td class="title">{{reservation.title}}</td>
           <td>{{reservation.creation_timestamp | date: 'dd/MM/y HH:mm'}}</td>
           <td><a ng-show="vm.currentUser.id === reservation.creation_user" ng-click="vm.deleteReservation(reservation.id)">delete</a></td>
           <td><a ng-href="#/reservation/{{reservation.id}}">details</a></td>

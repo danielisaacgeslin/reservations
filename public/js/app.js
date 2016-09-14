@@ -378,6 +378,7 @@
 		}
 
 		function _setReservation(){
+			vm.edition.title = vm.edition.title ? vm.edition.title : ' ';
 			return storeService.setReservation(vm.edition.title,
 				 vm.edition.description,
 				 vm.edition.body,
@@ -416,7 +417,7 @@
     }
 
     function updateComment(commentId){
-      return storeService.setComment(vm.editableCommentText, null, commentId).then(editComment);
+      return storeService.setComment(vm.editableCommentText, null, commentId).then(_toastSuccess).then(editComment);
     }
 
     function editComment(index, commentId){

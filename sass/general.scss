@@ -26,6 +26,10 @@ textarea {
       padding: 9px;
     }
   }
+  .title {
+    min-width:75px;
+    word-break:break-all;
+  }
   .switch {
     width:160px;
     margin: 15px auto;
@@ -47,7 +51,7 @@ textarea {
   }
   article {
     .title {
-
+      word-break:break-all;
     }
     .description {
 
@@ -70,6 +74,9 @@ textarea {
     margin-top:10px;
   }
   .comments {
+    .new-comment {
+      word-break:break-all;
+    }
     .delete {
       padding:0 5px;
       font-weight:bold;
@@ -82,6 +89,9 @@ textarea {
     }
     .comment-edit {
       margin-top:10px;
+      input {
+        word-break:break-all;
+      }
       textarea {
         min-height:75px;
       }
