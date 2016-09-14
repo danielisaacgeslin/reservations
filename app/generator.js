@@ -7,6 +7,7 @@ require('./services/store.service');
 require('./filters/time.filter');
 require('./filters/department.filter');
 require('./filters/month.filter');
+require('./filters/dateToNumber.filter');
 require('./directives/toaster.directive');
 require('./directives/calendar.directive');
 require('./controllers/app.controller');

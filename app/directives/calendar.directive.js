@@ -14,7 +14,8 @@
 					date: '=',
 					count: '=',
 					user: '=',
-					delete: '='
+					delete: '=',
+					newReservation: '='
       }
     };
 

@@ -14,7 +14,7 @@
       <ul class="nav navbar-nav" ng-show="vm.currentUser.id">
         <li ng-class="{'active': vm.route === '/'}"><a href="#/">Reservation List <span class="sr-only">(current)</span></a></li>
         <li ng-class="{'active': vm.route === '/tags'}"><a href="#/tags">Tag List</a></li>
-        <li ng-class="{'active': vm.route === '/reservation'}"><a href="#/reservation/new">Create New Reservation</a></li>
+        <li ng-class="{'active': vm.route === '/reservation'}"><a href="#/reservation/new/today">Create New Reservation</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" ng-show="vm.currentUser.id">
         <li><a ng-click="vm.logout()">

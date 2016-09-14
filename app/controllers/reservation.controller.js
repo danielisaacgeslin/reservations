@@ -44,6 +44,9 @@
 		function _activate(){
       if(isNaN($state.params.id)){
 				vm.ableToCheckVailidity = true;
+				if($state.params.date && !isNaN($state.params.date)){
+					vm.edition.date = new Date(Number($state.params.date));
+				}
 				$q.all([_getCurrentUser(),_getTags()]).then(_filterTags);
       }else{
         _getCurrentUser().then(_getReservation).then(function(){

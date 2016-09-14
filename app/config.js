@@ -18,7 +18,7 @@
       controller: 'loginController',
       controllerAs: 'vm'
 		}).state('/reservation', {
-			url : '/reservation/:id',
+			url : '/reservation/:id/:date',
       templateUrl : 'reservation.html',
       controller: 'reservationController',
       controllerAs: 'vm'

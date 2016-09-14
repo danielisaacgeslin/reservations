@@ -19,7 +19,7 @@
       controller: 'loginController',
       controllerAs: 'vm'
 		}).state('/reservation', {
-			url : '/reservation/:id',
+			url : '/reservation/:id/:date',
       templateUrl : 'reservation.html',
       controller: 'reservationController',
       controllerAs: 'vm'
@@ -159,9 +159,9 @@
 	'use strict';
 	angular.module('app').controller('mainController', mainController);
 
-	mainController.$inject = ['$scope', '$q', '$rootScope', 'storeService'];
+	mainController.$inject = ['$scope', '$q', '$rootScope', '$state', 'storeService'];
 
-	function mainController($scope, $q, $rootScope, storeService) {
+	function mainController($scope, $q, $rootScope, $state, storeService) {
 		var vm = this;
 		vm.visualization = 'calendar';
 		vm.date = new Date();
@@ -174,6 +174,7 @@
 		vm.next = next;
 		vm.prev = prev;
 		vm.getReservationList = getReservationList;
+		vm.goToNewReservaton = goToNewReservaton;
 
 		_activate();
 
@@ -221,6 +222,10 @@
 		function prev(asd){
 			vm.date.setMonth(vm.date.getMonth() - 1);
 			_getReservationList();
+		}
+
+		function goToNewReservaton(date){
+			$state.go('/reservation',{id:'new', date: date.getTime()});
 		}
 
 		function getReservationList(){
@@ -277,6 +282,9 @@
 		function _activate(){
       if(isNaN($state.params.id)){
 				vm.ableToCheckVailidity = true;
+				if($state.params.date && !isNaN($state.params.date)){
+					vm.edition.date = new Date(Number($state.params.date));
+				}
 				$q.all([_getCurrentUser(),_getTags()]).then(_filterTags);
       }else{
         _getCurrentUser().then(_getReservation).then(function(){
@@ -492,7 +500,8 @@
 					date: '=',
 					count: '=',
 					user: '=',
-					delete: '='
+					delete: '=',
+					newReservation: '='
       }
     };
 
@@ -590,6 +599,20 @@
 },{}],9:[function(require,module,exports){
 (function(){
 	'use strict';
+	angular.module('app').filter('dateToNumber', dateToNumberFilter);
+
+	function dateToNumberFilter() {
+		return function(input){
+      var output = null;
+      output = input.getTime();
+      return output;
+    };
+	}
+})();
+
+},{}],10:[function(require,module,exports){
+(function(){
+	'use strict';
 	angular.module('app').filter('department', departmentFilter);
 
 	function departmentFilter() {
@@ -627,7 +650,7 @@
 	}
 })();
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').filter('monthFilter', monthFilter);
@@ -645,7 +668,7 @@
 	}
 })();
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').filter('time', timeFilter);
@@ -673,7 +696,7 @@
 	}
 })();
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 require('./modules/app.module');
 require('./config');
 require('./services/interceptor.service');
@@ -683,6 +706,7 @@ require('./services/store.service');
 require('./filters/time.filter');
 require('./filters/department.filter');
 require('./filters/month.filter');
+require('./filters/dateToNumber.filter');
 require('./directives/toaster.directive');
 require('./directives/calendar.directive');
 require('./controllers/app.controller');
@@ -691,13 +715,13 @@ require('./controllers/main.controller');
 require('./controllers/reservation.controller');
 require('./controllers/tags.controller');
 
-},{"./config":1,"./controllers/app.controller":2,"./controllers/login.controller":3,"./controllers/main.controller":4,"./controllers/reservation.controller":5,"./controllers/tags.controller":6,"./directives/calendar.directive":7,"./directives/toaster.directive":8,"./filters/department.filter":9,"./filters/month.filter":10,"./filters/time.filter":11,"./modules/app.module":13,"./services/ajax.service":14,"./services/interceptor.service":15,"./services/process.service":16,"./services/store.service":17}],13:[function(require,module,exports){
+},{"./config":1,"./controllers/app.controller":2,"./controllers/login.controller":3,"./controllers/main.controller":4,"./controllers/reservation.controller":5,"./controllers/tags.controller":6,"./directives/calendar.directive":7,"./directives/toaster.directive":8,"./filters/dateToNumber.filter":9,"./filters/department.filter":10,"./filters/month.filter":11,"./filters/time.filter":12,"./modules/app.module":14,"./services/ajax.service":15,"./services/interceptor.service":16,"./services/process.service":17,"./services/store.service":18}],14:[function(require,module,exports){
 (function(){
   'use strict';
   angular.module('app', ['ui.router','ngSanitize']);
 })();
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('ajaxService', ajaxService);
@@ -912,7 +936,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('interceptor', interceptor);
@@ -951,7 +975,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('processService', processService);
@@ -988,7 +1012,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('storeService', storeService);
@@ -1200,4 +1224,4 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}]},{},[12]);
+},{}]},{},[13]);

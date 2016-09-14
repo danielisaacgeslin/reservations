@@ -2,9 +2,9 @@
 	'use strict';
 	angular.module('app').controller('mainController', mainController);
 
-	mainController.$inject = ['$scope', '$q', '$rootScope', 'storeService'];
+	mainController.$inject = ['$scope', '$q', '$rootScope', '$state', 'storeService'];
 
-	function mainController($scope, $q, $rootScope, storeService) {
+	function mainController($scope, $q, $rootScope, $state, storeService) {
 		var vm = this;
 		vm.visualization = 'calendar';
 		vm.date = new Date();
@@ -17,6 +17,7 @@
 		vm.next = next;
 		vm.prev = prev;
 		vm.getReservationList = getReservationList;
+		vm.goToNewReservaton = goToNewReservaton;
 
 		_activate();
 
@@ -64,6 +65,10 @@
 		function prev(asd){
 			vm.date.setMonth(vm.date.getMonth() - 1);
 			_getReservationList();
+		}
+
+		function goToNewReservaton(date){
+			$state.go('/reservation',{id:'new', date: date.getTime()});
 		}
 
 		function getReservationList(){
