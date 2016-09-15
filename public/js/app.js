@@ -532,7 +532,28 @@
     }
 
     function deleteComment(commentId){
-      return storeService.deleteComment(commentId, vm.reservation.id).then(_toastSuccess);
+			var date = vm.edition.date;
+			var title = 'About to delete a comment';
+			var body = 'Are you sure?';
+
+			var modalInstance = $uibModal.open({
+				templateUrl : 'confirmation.modal.html',
+				controller : 'confirmationModalController',
+				controllerAs: 'vm',
+				//windowClass : '',
+				//backdrop : 'static',
+				//keyboard : false,
+				resolve: {
+					data: {
+						title: title,
+						body: body
+					}
+				}
+			});
+
+			modalInstance.result.then(function(){
+				return storeService.deleteComment(commentId, vm.reservation.id).then(_toastSuccess);
+			});
     }
 
 		function setTag(){
