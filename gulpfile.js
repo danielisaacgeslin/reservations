@@ -16,10 +16,10 @@ gulp.task('default', function(){
   runSequence('dev');
 });
 
-gulp.task('dev', ['build','connect', 'watch']);
+gulp.task('dev', ['build', 'lint', 'connect', 'watch']);
 
 gulp.task('build', function(){
-  runSequence('build-main','libs','build-app','build-css','minify-html','images','fonts');
+  runSequence('build-main','libs','build-app','build-css','minify-html','images','fonts', 'lint');
 });
 
 /*end usable from terminal*/
@@ -121,7 +121,7 @@ gulp.task('build-main', function(){
 
 gulp.task('watch', function(){
 	gulp.watch('libs/**/*.*', ['libs']);
-	gulp.watch('app/**/*.js', ['brows-dev']);
+	gulp.watch('app/**/*.js', ['brows-dev','lint']);
 	gulp.watch('./sass/*.scss', [ 'build-css' ]);
 	gulp.watch('markup/**/*.html', ['minify-html']);
 	gulp.watch('images/**/*', ['images']);

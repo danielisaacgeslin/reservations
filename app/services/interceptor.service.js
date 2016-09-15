@@ -2,9 +2,9 @@
 	'use strict';
 	angular.module('app').factory('interceptor', interceptor);
 
-	interceptor.$inject = ['$q','$rootScope'];
+	interceptor.$inject = ['$q','$rootScope', '$state'];
 
-	function interceptor($q, $rootScope) {
+	function interceptor($q, $rootScope, $state) {
 		return {
       request: request,
       requestError: requestError,
@@ -29,7 +29,11 @@
     }
 
     function responseError(rejection){
-      $rootScope.$broadcast('ERROR', '');
+			if(rejection.status === 403){
+				$state.go('/login');
+			}
+			var message = rejection.data.payload ? rejection.data.payload : '';
+      $rootScope.$broadcast('ERROR', message);
       return $q.reject(rejection);
     }
 

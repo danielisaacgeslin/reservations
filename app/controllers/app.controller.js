@@ -39,9 +39,6 @@
     function _updateRoute(){
 			_getCurrentUser().then(function(){
 				vm.route = $state.current.name;
-				if(!vm.currentUser.id && $state.current.name && $state.current.name !== '/login'){
-					$state.go('/login');
-				}
 			});
     }
 

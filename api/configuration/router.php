@@ -17,6 +17,7 @@ if ($route === 'login') {
 }
 
 if(!$sessionValidity){
+    header('HTTP/1.0 403 '.INVALID_PRIVILEGES);
     response(ERROR, INVALID_PRIVILEGES);
     return false;
 }
