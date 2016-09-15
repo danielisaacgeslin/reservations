@@ -2,9 +2,9 @@
 	'use strict';
 	angular.module('app').controller('reservationController', reservationController);
 
-	reservationController.$inject = ['$scope', '$rootScope', '$state', '$q', 'storeService', 'ajaxService'];
+	reservationController.$inject = ['$scope', '$rootScope', '$state', '$q', 'storeService', 'ajaxService', 'processService'];
 
-	function reservationController($scope, $rootScope, $state, $q, storeService, ajaxService) {
+	function reservationController($scope, $rootScope, $state, $q, storeService, ajaxService, processService) {
 		var vm = this;
 
 		_activate();
@@ -52,9 +52,6 @@
 				$q.all([_getCurrentUser(),_getTags()]).then(_filterTags);
       }else{
         _getCurrentUser().then(_getReservation).then(function(){
-					if(!vm.reservation || !vm.reservation.id){
-						return false;
-					}
 					vm.ableToCheckVailidity = true;
 					_getComments();
 					_checkValidity();
@@ -77,8 +74,8 @@
 		}
 
 		function _checkValidity(){
-			var day = vm.edition.date.getDate();
-			var month = vm.edition.date.getMonth() + 1;
+			var day = processService.addZeros(vm.edition.date.getDate());
+			var month = processService.addZeros(vm.edition.date.getMonth() + 1);
 			var year = vm.edition.date.getFullYear();
 			var time = vm.edition.time;
 
@@ -105,16 +102,18 @@
 		}
 
     function _getReservation(){
-      return storeService.getReservation(vm.tempId ? vm.tempId : $state.params.id).then(function(reservation){
-				if(!reservation){
-					$state.go('/reservation',{id:'new', date: Date.now()});
-					storeService.resetReservations();
-					return false;
-				}
+			var defer = $q.defer();
+      storeService.getReservation(vm.tempId ? vm.tempId : $state.params.id).then(function(reservation){
 				vm.reservation = reservation;
         vm.edition = Object.assign({},reservation);
-				vm.editEnabled = vm.currentUser.id === reservation.creation_user;
+				vm.editEnabled = (vm.currentUser.id === reservation.creation_user) && reservation.date.getTime() > Date.now();
+				defer.resolve();
+			}).catch(function(){
+				$state.go('/reservation',{id:'new', date: Date.now()});
+				storeService.resetReservations();
+				defer.reject();
 			});
+			return defer.promise;
     }
 
     function _getComments(){

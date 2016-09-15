@@ -3,6 +3,13 @@
 class Reservation {
     
     public function reservationValidity($day, $month, $year, $time){
+        $now = (int) (date('Y').date('m').date('d'));
+        $date = (int) ($year.$month.$day);
+        
+        if($date < $now){
+            return false;
+        }
+        
         $link = Connection::connect();
         $query = 'SELECT ID FROM RESERVATIONS WHERE '
                 . 'DAY(DATE) = :day AND MONTH(DATE) = :month AND YEAR(DATE) = :year AND TIME = :time';

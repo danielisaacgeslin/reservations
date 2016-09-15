@@ -6,8 +6,13 @@
 
 	function processService() {
 		return {
-      dbArrayAdapter: dbArrayAdapter
+      dbArrayAdapter: dbArrayAdapter,
+			addZeros: addZeros
     };
+
+		function addZeros(number){
+			return number < 10 ? '0'.concat(number) : number;
+		}
 
     function dbArrayAdapter(dbArray){
       var dbObject = {}, tempObj = {}, value;

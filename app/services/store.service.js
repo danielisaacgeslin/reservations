@@ -62,6 +62,10 @@
         defer.resolve(reservations[reservationId]);
       }else{
         ajaxService.getReservation(reservationId).then(function(response){
+					if(!response.data.payload.length){
+						defer.reject();
+						return false;
+					}
           reservation = processService.dbArrayAdapter(response.data.payload);
           reservations[reservationId] = reservation[Object.keys(reservation)[0]];
 					defer.resolve(reservations[reservationId]);
@@ -106,10 +110,14 @@
 
     function getTags(){
       var defer = $q.defer();
-			ajaxService.getTags().then(function(response){
-				tags = Object.assign(processService.dbArrayAdapter(response.data.payload), tags);
+			if(Object.keys(tags).length){
 				defer.resolve(tags);
-			});
+			}else{
+				ajaxService.getTags().then(function(response){
+					tags = Object.assign(processService.dbArrayAdapter(response.data.payload), tags);
+					defer.resolve(tags);
+				});
+			}
       return defer.promise;
     }
 

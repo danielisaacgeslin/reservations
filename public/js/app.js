@@ -171,7 +171,6 @@
 		vm.next = next;
 		vm.prev = prev;
 		vm.getReservationList = getReservationList;
-		vm.goToNewReservaton = goToNewReservaton;
 
 		_activate();
 
@@ -221,10 +220,6 @@
 			_getReservationList();
 		}
 
-		function goToNewReservaton(date){
-			$state.go('/reservation',{id:'new', date: date.getTime()});
-		}
-
 		function getReservationList(){
 			_getReservationList();
 		}
@@ -237,9 +232,9 @@
 	'use strict';
 	angular.module('app').controller('reservationController', reservationController);
 
-	reservationController.$inject = ['$scope', '$rootScope', '$state', '$q', 'storeService', 'ajaxService'];
+	reservationController.$inject = ['$scope', '$rootScope', '$state', '$q', 'storeService', 'ajaxService', 'processService'];
 
-	function reservationController($scope, $rootScope, $state, $q, storeService, ajaxService) {
+	function reservationController($scope, $rootScope, $state, $q, storeService, ajaxService, processService) {
 		var vm = this;
 
 		_activate();
@@ -287,9 +282,6 @@
 				$q.all([_getCurrentUser(),_getTags()]).then(_filterTags);
       }else{
         _getCurrentUser().then(_getReservation).then(function(){
-					if(!vm.reservation || !vm.reservation.id){
-						return false;
-					}
 					vm.ableToCheckVailidity = true;
 					_getComments();
 					_checkValidity();
@@ -312,8 +304,8 @@
 		}
 
 		function _checkValidity(){
-			var day = vm.edition.date.getDate();
-			var month = vm.edition.date.getMonth() + 1;
+			var day = processService.addZeros(vm.edition.date.getDate());
+			var month = processService.addZeros(vm.edition.date.getMonth() + 1);
 			var year = vm.edition.date.getFullYear();
 			var time = vm.edition.time;
 
@@ -340,16 +332,18 @@
 		}
 
     function _getReservation(){
-      return storeService.getReservation(vm.tempId ? vm.tempId : $state.params.id).then(function(reservation){
-				if(!reservation){
-					$state.go('/reservation',{id:'new', date: Date.now()});
-					storeService.resetReservations();
-					return false;
-				}
+			var defer = $q.defer();
+      storeService.getReservation(vm.tempId ? vm.tempId : $state.params.id).then(function(reservation){
 				vm.reservation = reservation;
         vm.edition = Object.assign({},reservation);
-				vm.editEnabled = vm.currentUser.id === reservation.creation_user;
+				vm.editEnabled = (vm.currentUser.id === reservation.creation_user) && reservation.date.getTime() > Date.now();
+				defer.resolve();
+			}).catch(function(){
+				$state.go('/reservation',{id:'new', date: Date.now()});
+				storeService.resetReservations();
+				defer.reject();
 			});
+			return defer.promise;
     }
 
     function _getComments(){
@@ -515,6 +509,8 @@
     function link($scope){
 			$scope.days = [];
 
+			$scope.checkVaidity = checkVaidity;
+
 			$scope.$watch('data', _updateCalendar);
 			$scope.$on('updateCalendar',_updateCalendar);
 
@@ -557,6 +553,11 @@
       /*end private functions*/
 
       /*public functions*/
+			function checkVaidity(date){
+				var time = date.getTime();
+				var yesterday = new Date().setDate(new Date().getDate() - 1);
+				return time > yesterday ? '#/reservation/new/'.concat(time) : '';
+			}
       /*end public functions*/
     }
 	}
@@ -995,8 +996,13 @@ require('./controllers/tags.controller');
 
 	function processService() {
 		return {
-      dbArrayAdapter: dbArrayAdapter
+      dbArrayAdapter: dbArrayAdapter,
+			addZeros: addZeros
     };
+
+		function addZeros(number){
+			return number < 10 ? '0'.concat(number) : number;
+		}
 
     function dbArrayAdapter(dbArray){
       var dbObject = {}, tempObj = {}, value;
@@ -1088,6 +1094,10 @@ require('./controllers/tags.controller');
         defer.resolve(reservations[reservationId]);
       }else{
         ajaxService.getReservation(reservationId).then(function(response){
+					if(!response.data.payload.length){
+						defer.reject();
+						return false;
+					}
           reservation = processService.dbArrayAdapter(response.data.payload);
           reservations[reservationId] = reservation[Object.keys(reservation)[0]];
 					defer.resolve(reservations[reservationId]);
@@ -1132,10 +1142,14 @@ require('./controllers/tags.controller');
 
     function getTags(){
       var defer = $q.defer();
-			ajaxService.getTags().then(function(response){
-				tags = Object.assign(processService.dbArrayAdapter(response.data.payload), tags);
+			if(Object.keys(tags).length){
 				defer.resolve(tags);
-			});
+			}else{
+				ajaxService.getTags().then(function(response){
+					tags = Object.assign(processService.dbArrayAdapter(response.data.payload), tags);
+					defer.resolve(tags);
+				});
+			}
       return defer.promise;
     }
 

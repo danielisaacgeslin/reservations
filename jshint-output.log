@@ -1,11 +1,15 @@
 
-1 lint errors found in app\services\store.service.js
-  [41,17](W117) 'currentUserConcurrencyFlag' is not defined.
-1 lint errors found in app\services\store.service.js
-  [41,17](W117) 'currentUserConcurrencyFlag' is not defined.
-1 lint errors found in app\services\store.service.js
-  [38,13](W087) Forgotten 'debugger' statement?
-1 lint errors found in app\services\store.service.js
-  [38,13](W087) Forgotten 'debugger' statement?
-1 lint errors found in app\services\store.service.js
-  [38,13](W087) Forgotten 'debugger' statement?
+1 lint errors found in app\controllers\reservation.controller.js
+  [49,69](W035) Empty block.
+1 lint errors found in app\controllers\reservation.controller.js
+  [76,32](W074) This function's cyclomatic complexity is too high. (9)
+1 lint errors found in app\controllers\reservation.controller.js
+  [76,32](W074) This function's cyclomatic complexity is too high. (9)
+1 lint errors found in app\controllers\reservation.controller.js
+  [76,32](W074) This function's cyclomatic complexity is too high. (9)
+1 lint errors found in app\controllers\reservation.controller.js
+  [76,32](W074) This function's cyclomatic complexity is too high. (9)
+1 lint errors found in app\controllers\main.controller.js
+  [20,32](W117) 'goToNewReservaton' is not defined.
+1 lint errors found in app\directives\calendar.directive.js
+  [70,42](W033) Missing semicolon.

@@ -2,10 +2,12 @@
   <div class="day col-sm-3 col-xs-12" ng-repeat="day in days track by $index">
     <article class="panel" ng-class="{'panel-info': !day.empty, 'panel-danger': day.empty}">
       <div class="panel-heading">
-        <h3 class="panel-title" ng-click="newReservation(day.date)">
-          <span class="badge">{{day.date | date: 'dd'}}</span>
-          <span class="pull-right">{{day.date | date: 'EEEE'}}</span>
-        </h3>
+        <a ng-href="{{checkVaidity(day.date)}}">
+          <h3 class="panel-title">
+            <span class="badge">{{day.date | date: 'dd'}}</span>
+            <span class="pull-right">{{day.date | date: 'EEEE'}}</span>
+          </h3>
+      </a>
       </div>
       <div class="panel-body">
         <p class="label label-info" ng-repeat="item in day.items track by item.id">

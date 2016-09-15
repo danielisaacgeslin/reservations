@@ -22,6 +22,8 @@
     function link($scope){
 			$scope.days = [];
 
+			$scope.checkVaidity = checkVaidity;
+
 			$scope.$watch('data', _updateCalendar);
 			$scope.$on('updateCalendar',_updateCalendar);
 
@@ -64,6 +66,11 @@
       /*end private functions*/
 
       /*public functions*/
+			function checkVaidity(date){
+				var time = date.getTime();
+				var yesterday = new Date().setDate(new Date().getDate() - 1);
+				return time > yesterday ? '#/reservation/new/'.concat(time) : '';
+			}
       /*end public functions*/
     }
 	}

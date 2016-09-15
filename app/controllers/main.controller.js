@@ -17,7 +17,6 @@
 		vm.next = next;
 		vm.prev = prev;
 		vm.getReservationList = getReservationList;
-		vm.goToNewReservaton = goToNewReservaton;
 
 		_activate();
 
@@ -65,10 +64,6 @@
 		function prev(asd){
 			vm.date.setMonth(vm.date.getMonth() - 1);
 			_getReservationList();
-		}
-
-		function goToNewReservaton(date){
-			$state.go('/reservation',{id:'new', date: date.getTime()});
 		}
 
 		function getReservationList(){
