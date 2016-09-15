@@ -504,6 +504,7 @@
 			$scope.days = [];
 
 			$scope.checkVaidity = checkVaidity;
+			$scope.getNewHref = getNewHref;
 
 			$scope.$watch('data', _updateCalendar);
 			$scope.$on('updateCalendar',_updateCalendar);
@@ -550,7 +551,11 @@
 			function checkVaidity(date){
 				var time = date.getTime();
 				var yesterday = new Date().setDate(new Date().getDate() - 1);
-				return time > yesterday ? '#/reservation/new/'.concat(time) : '';
+				return time > yesterday;
+			}
+
+			function getNewHref(date){
+				return checkVaidity(date) ? '#/reservation/new/'.concat(date.getTime()) : '';
 			}
       /*end public functions*/
     }

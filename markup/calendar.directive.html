@@ -1,8 +1,9 @@
 <div class="calendar-directive row">
   <div class="day col-sm-3 col-xs-12" ng-repeat="day in days track by $index">
-    <article class="panel" ng-class="{'panel-info': !day.empty, 'panel-danger': day.empty}">
+    <article class="panel"
+             ng-class="{'panel-info': checkVaidity(day.date), 'panel-danger': !checkVaidity(day.date)}">
       <div class="panel-heading">
-        <a ng-href="{{checkVaidity(day.date)}}">
+        <a ng-href="{{getNewHref(day.date)}}">
           <h3 class="panel-title">
             <span class="badge">{{day.date | date: 'dd'}}</span>
             <span class="pull-right">{{day.date | date: 'EEEE'}}</span>
@@ -10,9 +11,17 @@
       </a>
       </div>
       <div class="panel-body">
-        <p class="label label-info" ng-repeat="item in day.items track by item.id">
+        <p class="label"
+           ng-class="{
+             'label-success': item.creation_user === user.id,
+             'label-info': item.creation_user !== user.id,
+             'label-danger': !checkVaidity(item.date)
+           }"
+           ng-repeat="item in day.items track by item.id">
           <a class="pull-left" href="#/reservation/{{item.id}}/{{item.date | dateToNumber}}">{{item.floor}}° {{item.department | department}} | {{item.time | time}}</a>
-          <a class="pull-right" ng-show="item.creation_user === user.id" ng-click="delete(item.id)">delete</a>
+          <a class="pull-right"
+             ng-show="item.creation_user === user.id && checkVaidity(item.date)"
+             ng-click="delete(item.id)">delete</a>
         </p>
       </div>
     </article>
