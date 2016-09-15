@@ -96,9 +96,7 @@
 
 		/*public functions*/
 		function logout(){
-			ajaxService.logout().then(function(){
-				vm.currentUser = {};
-				storeService.resetCurrentUser();
+			storeService.logout().then(function(){
 				$state.go('/login');
 			});
 		}
@@ -141,9 +139,7 @@
         if(response.data.status === 'ERROR'){
           vm.status = response.data.payload;
         }else{
-          storeService.getCurrentUser().then(function(user){
-            $state.go('/');
-          });
+          $state.go('/');
         }
       });
     }
@@ -1060,8 +1056,23 @@ require('./controllers/tags.controller');
       resetReservations: resetReservations,
       resetComments: resetComments,
       resetTags: resetTags,
-			resetCurrentUser: resetCurrentUser
+			resetCurrentUser: resetCurrentUser,
+
+			logout: logout
     };
+
+		function logout(){
+			var defer = $q.defer();
+			ajaxService.logout().then(function(){
+				resetCurrentUser();
+				resetReservations();
+				resetTags();
+				resetComments();
+				currentUserDefer = null;
+				defer.resolve();
+			});
+			return defer.promise;
+		}
 
 		function getCurrentUser(){
 			var adapted = null;

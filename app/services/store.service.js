@@ -28,8 +28,23 @@
       resetReservations: resetReservations,
       resetComments: resetComments,
       resetTags: resetTags,
-			resetCurrentUser: resetCurrentUser
+			resetCurrentUser: resetCurrentUser,
+
+			logout: logout
     };
+
+		function logout(){
+			var defer = $q.defer();
+			ajaxService.logout().then(function(){
+				resetCurrentUser();
+				resetReservations();
+				resetTags();
+				resetComments();
+				currentUserDefer = null;
+				defer.resolve();
+			});
+			return defer.promise;
+		}
 
 		function getCurrentUser(){
 			var adapted = null;

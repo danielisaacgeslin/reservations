@@ -51,9 +51,7 @@
 
 		/*public functions*/
 		function logout(){
-			ajaxService.logout().then(function(){
-				vm.currentUser = {};
-				storeService.resetCurrentUser();
+			storeService.logout().then(function(){
 				$state.go('/login');
 			});
 		}

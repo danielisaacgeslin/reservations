@@ -32,9 +32,7 @@
         if(response.data.status === 'ERROR'){
           vm.status = response.data.payload;
         }else{
-          storeService.getCurrentUser().then(function(user){
-            $state.go('/');
-          });
+          $state.go('/');
         }
       });
     }

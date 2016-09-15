@@ -1,15 +1,19 @@
 
-1 lint errors found in app\controllers\reservation.controller.js
-  [49,69](W035) Empty block.
-1 lint errors found in app\controllers\reservation.controller.js
-  [76,32](W074) This function's cyclomatic complexity is too high. (9)
-1 lint errors found in app\controllers\reservation.controller.js
-  [76,32](W074) This function's cyclomatic complexity is too high. (9)
-1 lint errors found in app\controllers\reservation.controller.js
-  [76,32](W074) This function's cyclomatic complexity is too high. (9)
-1 lint errors found in app\controllers\reservation.controller.js
-  [76,32](W074) This function's cyclomatic complexity is too high. (9)
-1 lint errors found in app\controllers\main.controller.js
-  [20,32](W117) 'goToNewReservaton' is not defined.
-1 lint errors found in app\directives\calendar.directive.js
-  [70,42](W033) Missing semicolon.
+1 lint errors found in app\services\store.service.js
+  [46,13](W027) Unreachable 'return' after 'return'.
+1 lint errors found in app\services\store.service.js
+  [39,17](W087) Forgotten 'debugger' statement?
+1 lint errors found in app\controllers\login.controller.js
+  [32,17](W087) Forgotten 'debugger' statement?
+1 lint errors found in app\controllers\login.controller.js
+  [32,17](W087) Forgotten 'debugger' statement?
+1 lint errors found in app\controllers\login.controller.js
+  [32,17](W087) Forgotten 'debugger' statement?
+1 lint errors found in app\controllers\login.controller.js
+  [21,42](W033) Missing semicolon.
+1 lint errors found in app\controllers\login.controller.js
+  [30,34](W033) Missing semicolon.
+1 lint errors found in app\controllers\login.controller.js
+  [20,17](W087) Forgotten 'debugger' statement?
+1 lint errors found in app\controllers\login.controller.js
+  [19,13](W087) Forgotten 'debugger' statement?
