@@ -2,9 +2,9 @@
 	'use strict';
 	angular.module('app').controller('reservationController', reservationController);
 
-	reservationController.$inject = ['$scope', '$rootScope', '$state', '$q', 'storeService', 'ajaxService', 'processService'];
+	reservationController.$inject = ['$scope', '$rootScope', '$state', '$q', '$uibModal', 'storeService', 'ajaxService', 'processService'];
 
-	function reservationController($scope, $rootScope, $state, $q, storeService, ajaxService, processService) {
+	function reservationController($scope, $rootScope, $state, $q, $uibModal, storeService, ajaxService, processService) {
 		var vm = this;
 
 		_activate();
@@ -186,7 +186,36 @@
     }
 
     function saveReservation(){
-      _setReservation().then(_getReservation).then(_getReservationTagList).then(_getComments).then(_filterTags);
+			var date = vm.edition.date;
+			var title = 'About to save a reservation';
+			var body = 'You are about to save "'
+			.concat(vm.edition.title)
+			.concat(' - ')
+			.concat(date.getDate()).concat('/').concat(date.getMonth()).concat('/').concat(date.getFullYear())
+			.concat('". Are you sure?');
+
+			var modalInstance = $uibModal.open({
+				templateUrl : 'confirmation.modal.html',
+				controller : 'confirmationModalController',
+				controllerAs: 'vm',
+				//windowClass : '',
+				//backdrop : 'static',
+				//keyboard : false,
+				resolve: {
+					data: {
+						title: title,
+						body: body
+					}
+				}
+			});
+
+			/*accepting deletion*/
+			modalInstance.result
+			.then(_setReservation)
+			.then(_getReservation)
+			.then(_getReservationTagList)
+			.then(_getComments)
+			.then(_filterTags);
     }
 
     function saveComment(){

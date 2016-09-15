@@ -1,3 +1,4 @@
 
-1 lint errors found in app\controllers\confirmationModal.controller.js
-  [24,28](W033) Missing semicolon.
+2 lint errors found in app\controllers\reservation.controller.js
+  [189,40](W117) 'reservationId' is not defined.
+  [192,37](W117) 'reservationId' is not defined.
