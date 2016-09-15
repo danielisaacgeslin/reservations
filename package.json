@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "dantools",
   "main": "gulpfile.js",
-  "scripts": {},
+  "scripts": {
+    "start": "gulp build && gulp watch",
+    "pull": "git pull",
+    "push": "git add * && git commit -m update && git push"
+  },
   "devDependencies": {
     "angular": "^1.5.8",
     "angular-animate": "^1.5.8",
