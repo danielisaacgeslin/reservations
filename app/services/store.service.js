@@ -7,6 +7,8 @@
 	function storeService(ajaxService, processService, $q) {
     var reservations = {}, comments = {}, tags = {}, currentUser = {};
 
+		var currentUserDefer = null;
+
 		return {
       getReservation: getReservation,
       getReservationList: getReservationList,
@@ -30,18 +32,27 @@
     };
 
 		function getCurrentUser(){
-			var defer = $q.defer();
 			var adapted = null;
+			var firstRequest = false;
+
+			if(!currentUserDefer){
+				firstRequest = true;
+				currentUserDefer = $q.defer();
+			}
+
 			if(currentUser.id){
-				defer.resolve(currentUser);
-			}else{
+				currentUserDefer.resolve(currentUser);
+			}
+
+			if(!currentUser.id && firstRequest){
 				ajaxService.getCurrentUser().then(function(response){
 					adapted = processService.dbArrayAdapter([response.data.payload]);
 					currentUser = adapted[Object.keys(adapted)[0]];
-					defer.resolve(currentUser);
+					currentUserDefer.resolve(currentUser);
 				});
 			}
-			return defer.promise;
+
+			return currentUserDefer.promise;
 		}
 
     function getReservation(reservationId){

@@ -6,42 +6,44 @@
 
 	function reservationController($scope, $rootScope, $state, $q, storeService, ajaxService) {
 		var vm = this;
-		vm.reservation = {};
-    vm.edition = {
-			title: null,
-			description: null,
-			body: null,
-			time: '1',
-			date: new Date()
-		};
-    vm.newComment = '';
-    vm.editableComment = -1;
-    vm.editableCommentText = '';
-		vm.filteredTags = {};
-		vm.noTagOption = {0: {id: 0, text: 'No tags available'}};
-		vm.selectedTag = null;
-		vm.tempId = null;
-		vm.editEnabled = true;
-		vm.times = [1,2,3];
-		vm.reservationValidity = true;
-		vm.currentUser = {};
-
-    vm.toggleEdit = toggleEdit;
-    vm.saveReservation = saveReservation;
-    vm.saveComment = saveComment;
-    vm.editComment = editComment;
-    vm.updateComment = updateComment;
-    vm.deleteComment = deleteComment;
-		vm.setTag = setTag;
-		vm.deleteTag = deleteTag;
-		vm.ableToCheckVailidity = false;
-
-		$scope.$watch('vm.edition.date', _checkValidity);
-		$scope.$watch('vm.edition.time', _checkValidity);
 
 		_activate();
+
     /*private functions*/
 		function _activate(){
+			vm.reservation = {};
+	    vm.edition = {
+				title: null,
+				description: null,
+				body: null,
+				time: '1',
+				date: new Date()
+			};
+	    vm.newComment = '';
+	    vm.editableComment = -1;
+	    vm.editableCommentText = '';
+			vm.filteredTags = {};
+			vm.noTagOption = {0: {id: 0, text: 'No tags available'}};
+			vm.selectedTag = null;
+			vm.tempId = null;
+			vm.editEnabled = true;
+			vm.times = [1,2,3];
+			vm.reservationValidity = true;
+			vm.currentUser = {};
+
+	    vm.toggleEdit = toggleEdit;
+	    vm.saveReservation = saveReservation;
+	    vm.saveComment = saveComment;
+	    vm.editComment = editComment;
+	    vm.updateComment = updateComment;
+	    vm.deleteComment = deleteComment;
+			vm.setTag = setTag;
+			vm.deleteTag = deleteTag;
+			vm.ableToCheckVailidity = false;
+
+			$scope.$watch('vm.edition.date', _checkValidity);
+			$scope.$watch('vm.edition.time', _checkValidity);
+
       if(isNaN($state.params.id)){
 				vm.ableToCheckVailidity = true;
 				if($state.params.date && !isNaN($state.params.date)){
