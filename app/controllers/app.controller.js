@@ -21,7 +21,6 @@
 		/*private functions*/
 		function _activate(){
 			_updateRoute();
-			_getCurrentUser();
 		}
 
 		function _toastError(e,data){
@@ -37,6 +36,9 @@
 		}
 
     function _updateRoute(){
+			if(!$state.current.name || $state.current.name === '/login'){
+				return false;
+			}
 			_getCurrentUser().then(function(){
 				vm.route = $state.current.name;
 			});

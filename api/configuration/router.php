@@ -8,7 +8,7 @@ $sessionValidity = $user->validateSession();
 if ($route === 'login') {
     if (!$sessionValidity) {
         $result = $user->login($_POST['username'], $_POST['password']);
-        ($result ? response(OK, $result) : response(ERROR, INVALID_LOGIN));
+        ($result ? response(OK, true) : response(ERROR, INVALID_LOGIN));
         return false;
     } else {
         response(ERROR, SESSION_ACTIVE);

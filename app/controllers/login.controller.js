@@ -16,11 +16,7 @@
 
 		/*private functions*/
 		function _activate(){
-      storeService.getCurrentUser().then(function(user){
-        if(user.id){
-          $state.go('/');
-        }
-      });
+			
 		}
 
 		/*end private functions*/
