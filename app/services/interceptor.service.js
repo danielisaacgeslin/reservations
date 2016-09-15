@@ -32,6 +32,9 @@
 			if(rejection.status === 403){
 				$state.go('/login');
 			}
+			if(rejection.status === 400){
+				$state.go('/');
+			}
 			var message = rejection.data.payload ? rejection.data.payload : '';
       $rootScope.$broadcast('ERROR', message);
       return $q.reject(rejection);

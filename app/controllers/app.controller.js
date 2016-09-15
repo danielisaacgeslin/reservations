@@ -37,10 +37,13 @@
 
     function _updateRoute(){
 			if(!$state.current.name || $state.current.name === '/login'){
+				storeService.resetCurrentUser();
+				vm.currentUser = {};
 				return false;
 			}
 			_getCurrentUser().then(function(){
 				vm.route = $state.current.name;
+				console.log(vm.currentUser);
 			});
     }
 

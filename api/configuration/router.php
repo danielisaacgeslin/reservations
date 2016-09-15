@@ -11,6 +11,7 @@ if ($route === 'login') {
         ($result ? response(OK, true) : response(ERROR, INVALID_LOGIN));
         return false;
     } else {
+        header('HTTP/1.0 400 '.SESSION_ACTIVE);
         response(ERROR, SESSION_ACTIVE);
         return false;
     }

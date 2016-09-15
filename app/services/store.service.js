@@ -40,7 +40,6 @@
 				resetReservations();
 				resetTags();
 				resetComments();
-				currentUserDefer = null;
 				defer.resolve();
 			});
 			return defer.promise;
@@ -237,6 +236,7 @@
     }
 
 		function resetCurrentUser(){
+			currentUserDefer = null;
       currentUser = {};
     }
 

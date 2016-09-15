@@ -1,3 +1,5 @@
 
-1 lint errors found in app\controllers\login.controller.js
-  [20,7](W027) Unreachable 'storeService' after 'return'.
+1 lint errors found in app\controllers\app.controller.js
+  [49,35](W033) Missing semicolon.
+1 lint errors found in app\controllers\app.controller.js
+  [39,31](W033) Missing semicolon.

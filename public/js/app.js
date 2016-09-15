@@ -82,10 +82,13 @@
 
     function _updateRoute(){
 			if(!$state.current.name || $state.current.name === '/login'){
+				storeService.resetCurrentUser();
+				vm.currentUser = {};
 				return false;
 			}
 			_getCurrentUser().then(function(){
 				vm.route = $state.current.name;
+				console.log(vm.currentUser);
 			});
     }
 
@@ -978,6 +981,9 @@ require('./controllers/tags.controller');
 			if(rejection.status === 403){
 				$state.go('/login');
 			}
+			if(rejection.status === 400){
+				$state.go('/');
+			}
 			var message = rejection.data.payload ? rejection.data.payload : '';
       $rootScope.$broadcast('ERROR', message);
       return $q.reject(rejection);
@@ -1071,7 +1077,6 @@ require('./controllers/tags.controller');
 				resetReservations();
 				resetTags();
 				resetComments();
-				currentUserDefer = null;
 				defer.resolve();
 			});
 			return defer.promise;
@@ -1268,6 +1273,7 @@ require('./controllers/tags.controller');
     }
 
 		function resetCurrentUser(){
+			currentUserDefer = null;
       currentUser = {};
     }
 
