@@ -13,5 +13,6 @@ require('./directives/calendar.directive');
 require('./controllers/app.controller');
 require('./controllers/login.controller');
 require('./controllers/main.controller');
+require('./controllers/confirmationModal.controller');
 require('./controllers/reservation.controller');
 require('./controllers/tags.controller');

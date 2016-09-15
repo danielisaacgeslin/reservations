@@ -37,7 +37,7 @@
       <h5>New comment</h5>
       <input class="form-control new-comment" type="text" ng-model="vm.newComment" />
       <div>
-        <button ng-click="vm.saveComment()" class="btn btn-default">Add comment</button>
+        <button ng-click="vm.saveComment()" ng-disabled="!vm.newComment.length" class="btn btn-default">Add comment</button>
       </div>
     </div>
   </div>

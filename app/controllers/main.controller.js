@@ -2,9 +2,9 @@
 	'use strict';
 	angular.module('app').controller('mainController', mainController);
 
-	mainController.$inject = ['$scope', '$q', '$rootScope', '$state', 'storeService'];
+	mainController.$inject = ['$scope', '$q', '$rootScope', '$state', '$uibModal', 'storeService'];
 
-	function mainController($scope, $q, $rootScope, $state, storeService) {
+	function mainController($scope, $q, $rootScope, $state, $uibModal, storeService) {
 		var vm = this;
 		vm.visualization = 'calendar';
 		vm.date = new Date();
@@ -17,6 +17,7 @@
 		vm.next = next;
 		vm.prev = prev;
 		vm.getReservationList = getReservationList;
+		vm.checkVaidity = checkVaidity;
 
 		_activate();
 
@@ -46,9 +47,35 @@
 		/*end private functions*/
 
 		/*public functions*/
-		function deleteReservation(articleId){
-			storeService.deleteReservation(articleId).then(_toastSuccess).then(function(){
-				$scope.$broadcast('updateCalendar');
+		function deleteReservation(reservationId){
+			var date = vm.reservations[reservationId].date;
+			var title = 'About to delete a reservation';
+			var body = 'You are about to delete "'
+			.concat(vm.reservations[reservationId].title)
+			.concat(' - ')
+			.concat(date.getDate()).concat('/').concat(date.getMonth()).concat('/').concat(date.getFullYear())
+			.concat('". This action cannot be reverted, are you sure?');
+
+			var modalInstance = $uibModal.open({
+				templateUrl : 'confirmation.modal.html',
+				controller : 'confirmationModalController',
+				controllerAs: 'vm',
+				//windowClass : '',
+				//backdrop : 'static',
+				//keyboard : false,
+				resolve: {
+					data: {
+						title: title,
+						body: body
+					}
+				}
+			});
+
+			/*accepting deletion*/
+			modalInstance.result.then(function(){
+				storeService.deleteReservation(reservationId).then(_toastSuccess).then(function(){
+					$scope.$broadcast('updateCalendar');
+				});
 			});
 		}
 
@@ -68,6 +95,12 @@
 
 		function getReservationList(){
 			_getReservationList();
+		}
+
+		function checkVaidity(date){
+			var time = date.getTime();
+			var yesterday = new Date().setDate(new Date().getDate() - 1);
+			return time > yesterday;
 		}
 		/*end public functions*/
 	}

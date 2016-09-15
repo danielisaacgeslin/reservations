@@ -88,7 +88,6 @@
 			}
 			_getCurrentUser().then(function(){
 				vm.route = $state.current.name;
-				console.log(vm.currentUser);
 			});
     }
 
@@ -110,6 +109,40 @@
 })();
 
 },{}],3:[function(require,module,exports){
+(function(){
+	'use strict';
+	angular.module('app').controller('confirmationModalController', confirmationModalController);
+
+	confirmationModalController.$inject = ['$scope', '$uibModalInstance', 'data'];
+
+	function confirmationModalController($scope, $uibModalInstance, data) {
+		var vm = this;
+    vm.data = data;
+
+    vm.cancel = cancel;
+    vm.accept = accept;
+
+		_activate();
+
+		/*private functions*/
+		function _activate(){
+
+		}
+		/*end private functions*/
+
+		/*public functions*/
+    function cancel(){
+      $uibModalInstance.dismiss('delete');
+    }
+
+    function accept(){
+      $uibModalInstance.close();
+    }
+		/*end public functions*/
+	}
+})();
+
+},{}],4:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').controller('loginController', loginController);
@@ -148,14 +181,14 @@
 	}
 })();
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').controller('mainController', mainController);
 
-	mainController.$inject = ['$scope', '$q', '$rootScope', '$state', 'storeService'];
+	mainController.$inject = ['$scope', '$q', '$rootScope', '$state', '$uibModal', 'storeService'];
 
-	function mainController($scope, $q, $rootScope, $state, storeService) {
+	function mainController($scope, $q, $rootScope, $state, $uibModal, storeService) {
 		var vm = this;
 		vm.visualization = 'calendar';
 		vm.date = new Date();
@@ -168,6 +201,7 @@
 		vm.next = next;
 		vm.prev = prev;
 		vm.getReservationList = getReservationList;
+		vm.checkVaidity = checkVaidity;
 
 		_activate();
 
@@ -197,9 +231,35 @@
 		/*end private functions*/
 
 		/*public functions*/
-		function deleteReservation(articleId){
-			storeService.deleteReservation(articleId).then(_toastSuccess).then(function(){
-				$scope.$broadcast('updateCalendar');
+		function deleteReservation(reservationId){
+			var date = vm.reservations[reservationId].date;
+			var title = 'About to delete a reservation';
+			var body = 'You are about to delete "'
+			.concat(vm.reservations[reservationId].title)
+			.concat(' - ')
+			.concat(date.getDate()).concat('/').concat(date.getMonth()).concat('/').concat(date.getFullYear())
+			.concat('". This action cannot be reverted, are you sure?');
+
+			var modalInstance = $uibModal.open({
+				templateUrl : 'confirmation.modal.html',
+				controller : 'confirmationModalController',
+				controllerAs: 'vm',
+				//windowClass : '',
+				//backdrop : 'static',
+				//keyboard : false,
+				resolve: {
+					data: {
+						title: title,
+						body: body
+					}
+				}
+			});
+
+			/*accepting deletion*/
+			modalInstance.result.then(function(){
+				storeService.deleteReservation(reservationId).then(_toastSuccess).then(function(){
+					$scope.$broadcast('updateCalendar');
+				});
 			});
 		}
 
@@ -220,11 +280,17 @@
 		function getReservationList(){
 			_getReservationList();
 		}
+
+		function checkVaidity(date){
+			var time = date.getTime();
+			var yesterday = new Date().setDate(new Date().getDate() - 1);
+			return time > yesterday;
+		}
 		/*end public functions*/
 	}
 })();
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').controller('reservationController', reservationController);
@@ -455,7 +521,7 @@
 	}
 })();
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').controller('tagsController', tagsController);
@@ -481,7 +547,7 @@
 	}
 })();
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').directive('calendar', calendarDirective);
@@ -565,7 +631,7 @@
 	}
 })();
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').directive('toaster', toaster);
@@ -606,7 +672,7 @@
 	}
 })();
 
-},{}],9:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').filter('dateToNumber', dateToNumberFilter);
@@ -620,7 +686,7 @@
 	}
 })();
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').filter('department', departmentFilter);
@@ -660,7 +726,7 @@
 	}
 })();
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').filter('monthFilter', monthFilter);
@@ -678,7 +744,7 @@
 	}
 })();
 
-},{}],12:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').filter('time', timeFilter);
@@ -706,7 +772,7 @@
 	}
 })();
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 require('./modules/app.module');
 require('./config');
 require('./services/interceptor.service');
@@ -722,16 +788,17 @@ require('./directives/calendar.directive');
 require('./controllers/app.controller');
 require('./controllers/login.controller');
 require('./controllers/main.controller');
+require('./controllers/confirmationModal.controller');
 require('./controllers/reservation.controller');
 require('./controllers/tags.controller');
 
-},{"./config":1,"./controllers/app.controller":2,"./controllers/login.controller":3,"./controllers/main.controller":4,"./controllers/reservation.controller":5,"./controllers/tags.controller":6,"./directives/calendar.directive":7,"./directives/toaster.directive":8,"./filters/dateToNumber.filter":9,"./filters/department.filter":10,"./filters/month.filter":11,"./filters/time.filter":12,"./modules/app.module":14,"./services/ajax.service":15,"./services/interceptor.service":16,"./services/process.service":17,"./services/store.service":18}],14:[function(require,module,exports){
+},{"./config":1,"./controllers/app.controller":2,"./controllers/confirmationModal.controller":3,"./controllers/login.controller":4,"./controllers/main.controller":5,"./controllers/reservation.controller":6,"./controllers/tags.controller":7,"./directives/calendar.directive":8,"./directives/toaster.directive":9,"./filters/dateToNumber.filter":10,"./filters/department.filter":11,"./filters/month.filter":12,"./filters/time.filter":13,"./modules/app.module":15,"./services/ajax.service":16,"./services/interceptor.service":17,"./services/process.service":18,"./services/store.service":19}],15:[function(require,module,exports){
 (function(){
   'use strict';
-  angular.module('app', ['ui.router','ngSanitize']);
+  angular.module('app', ['ui.router','ngAnimate', 'ui.bootstrap']);
 })();
 
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('ajaxService', ajaxService);
@@ -946,7 +1013,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('interceptor', interceptor);
@@ -992,7 +1059,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('processService', processService);
@@ -1034,7 +1101,7 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 (function(){
 	'use strict';
 	angular.module('app').factory('storeService', storeService);
@@ -1280,4 +1347,4 @@ require('./controllers/tags.controller');
 	}
 })();
 
-},{}]},{},[13]);
+},{}]},{},[14]);

@@ -43,7 +43,6 @@
 			}
 			_getCurrentUser().then(function(){
 				vm.route = $state.current.name;
-				console.log(vm.currentUser);
 			});
     }
 
