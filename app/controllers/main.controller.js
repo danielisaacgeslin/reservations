@@ -19,6 +19,8 @@
 		vm.getReservationList = getReservationList;
 		vm.checkVaidity = checkVaidity;
 
+		vm.loading = false;
+
 		_activate();
 
 		/*private functions*/
@@ -40,8 +42,11 @@
 			var month = vm.date.getMonth() + 1;
 			var year = vm.date.getFullYear();
 
+			vm.loading = true;
+
 			storeService.getReservationList(month, year).then(function(reservations){
 				vm.reservations = reservations;
+				vm.loading = false;
 			});
 		}
 		/*end private functions*/

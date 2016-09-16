@@ -36,7 +36,6 @@
 				$state.go('/');
 			}
 			var message = rejection.data.payload ? rejection.data.payload : '';
-      $rootScope.$broadcast('ERROR', message);
       return $q.reject(rejection);
     }
 

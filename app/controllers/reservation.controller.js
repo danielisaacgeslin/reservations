@@ -17,7 +17,8 @@
 				description: null,
 				body: null,
 				time: '1',
-				date: new Date()
+				date: new Date(),
+				loading: '='
 			};
 	    vm.newComment = '';
 	    vm.editableComment = -1;
@@ -40,6 +41,8 @@
 			vm.setTag = setTag;
 			vm.deleteTag = deleteTag;
 			vm.ableToCheckVailidity = false;
+
+			vm.loading = false;
 
 			$scope.$watch('vm.edition.date', _checkValidity);
 			$scope.$watch('vm.edition.time', _checkValidity);
@@ -64,6 +67,7 @@
 			var defer = $q.defer();
 			$rootScope.$broadcast('OK', '');
 			defer.resolve();
+			vm.loading = false;
 			return defer.promise;
 		}
 
@@ -158,6 +162,7 @@
 
 		function _setReservation(){
 			vm.edition.title = vm.edition.title ? vm.edition.title : ' ';
+			vm.loading = true;
 			return storeService.setReservation(vm.edition.title,
 				 vm.edition.description,
 				 vm.edition.body,
@@ -219,12 +224,14 @@
     }
 
     function saveComment(){
+			vm.loading = true;
       return storeService.setComment(vm.newComment, vm.reservation.id).then(function(){
         vm.newComment = '';
       }).then(_toastSuccess);
     }
 
     function updateComment(commentId){
+			vm.loading = true;
       return storeService.setComment(vm.editableCommentText, null, commentId).then(_toastSuccess).then(editComment);
     }
 
@@ -259,18 +266,21 @@
 			});
 
 			modalInstance.result.then(function(){
+				vm.loading = true;
 				return storeService.deleteComment(commentId, vm.reservation.id).then(_toastSuccess);
 			});
     }
 
 		function setTag(){
+			vm.loading = true;
 			storeService.setTag(vm.reservation.id, vm.selectedTag.id)
-			.then(_toastSuccess)
 			.then(_getReservationTagList)
+			.then(_toastSuccess)
 			.then(_filterTags);
 		}
 
 		function deleteTag(tagId){
+			vm.loading = true;
 			return storeService.deleteTag(vm.reservation.id, tagId).then(_toastSuccess).then(_filterTags);
 		}
     /*end public functions*/
