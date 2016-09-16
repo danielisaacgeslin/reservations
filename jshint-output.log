@@ -1,4 +1,8 @@
 
-2 lint errors found in app\controllers\reservation.controller.js
-  [189,40](W117) 'reservationId' is not defined.
-  [192,37](W117) 'reservationId' is not defined.
+2 lint errors found in app\config.js
+  [36,35](W027) Unreachable ';' after 'return'.
+  [36,35](W032) Unnecessary semicolon.
+3 lint errors found in app\config.js
+  [43,17](W030) Expected an assignment or function call and instead saw an expression.
+  [43,20](E058) Missing semicolon.
+  [43,20](W030) Expected an assignment or function call and instead saw an expression.

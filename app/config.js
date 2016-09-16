@@ -11,23 +11,37 @@
 			url : '/',
 			templateUrl : 'main.html',
 			controller: 'mainController',
-			controllerAs: 'vm'
+			controllerAs: 'vm',
+			resolve: {ping: ping}
 		}).state('/login', {
 			url : '/login',
       templateUrl : 'login.html',
       controller: 'loginController',
-      controllerAs: 'vm'
+      controllerAs: 'vm',
+			resolve: {checkSession:checkSession}
 		}).state('/reservation', {
 			url : '/reservation/:id/:date',
       templateUrl : 'reservation.html',
       controller: 'reservationController',
-      controllerAs: 'vm'
+      controllerAs: 'vm',
+			resolve: {ping: ping}
 		}).state('/tags', {
 			url : '/tags',
       templateUrl : 'tags.html',
       controller: 'tagsController',
-      controllerAs: 'vm'
+      controllerAs: 'vm',
+			resolve: {ping: ping}
 		});
+	}
+
+	ping.$inject = ['ajaxService'];
+	function ping(ajaxService){
+		return ajaxService.ping();
+	}
+
+	checkSession.$inject = ['ajaxService'];
+	function checkSession(ajaxService){
+		return ajaxService.checkSession();
 	}
 
 	function constants(){

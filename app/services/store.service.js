@@ -78,7 +78,7 @@
         ajaxService.getReservation(reservationId).then(function(response){
 					if(!response.data.payload.length){
 						defer.reject();
-						return false;
+						return defer.promise;
 					}
           reservation = processService.dbArrayAdapter(response.data.payload);
           reservations[reservationId] = reservation[Object.keys(reservation)[0]];

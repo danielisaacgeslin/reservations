@@ -1,3 +1,5 @@
+A PHP and AngularJS reservations system for apartment buildings
+
 example: <url>?route=getReservation&reservation_id=1
 
 routes (always as GET parameter "route"):

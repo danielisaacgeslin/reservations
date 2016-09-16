@@ -9,7 +9,9 @@
 
 		return {
 			/*GET*/
-			ping: ping, // N/A
+			ping: ping, // N/A,
+			checkSession: checkSession,
+
 			getReservation: getReservation, // reservation_id(int)
 			getReservationList: getReservationList, // N/A
 			getReservationTagList: getReservationTagList, // reservation_id(int)
@@ -34,6 +36,11 @@
 		/*N/A*/
 		function ping(){
 			return $http.get(url.concat('?route=ping'));
+		}
+
+		/*N/A*/
+		function checkSession(){
+			return $http.get(url.concat('?route=checkSession'));
 		}
 
 		function login(username, password){

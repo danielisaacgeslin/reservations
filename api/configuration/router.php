@@ -1,9 +1,18 @@
 <?php
-
 $route = isset($_GET['route']) ? $_GET['route'] : '';
 $user = new User();
 
 $sessionValidity = $user->validateSession();
+
+if($route === 'checkSession'){
+    if($sessionValidity){
+        header('HTTP/1.0 400 '.SESSION_ACTIVE);
+        response('OK',SESSION_ACTIVE);
+    }else{
+        response('OK',false);
+    }
+    return false;
+}
 
 if ($route === 'login') {
     if (!$sessionValidity) {
