@@ -1,24 +1,17 @@
 {
   "name": "dantools",
   "version": "1.0.0",
-  "description": "dantools",
+  "description": "reservations",
   "main": "gulpfile.js",
   "scripts": {
-    "start": "gulp build && gulp watch",
+    "start": "gulp dev",
     "pull": "git pull",
-    "push": "git add * && git commit -m update && git push"
+    "push": "git add * && git commit -m update && git push",
+    "test": "karma start karma.conf.js"
   },
   "devDependencies": {
-    "angular": "^1.5.8",
-    "angular-animate": "^1.5.8",
-    "angular-bootstrap": "^0.12.2",
-    "angular-material": "^1.1.1",
-    "angular-sanitize": "^1.5.8",
-    "angular-ui-bootstrap": "^2.1.3",
-    "angular-ui-router": "^1.0.0-beta.2",
-    "bootstrap": "^3.3.7",
+    "bower": "^1.7.9",
     "browserify": "^13.1.0",
-    "font-awesome": "^4.6.3",
     "gulp": "^3.9.1",
     "gulp-angular-templatecache": "^2.0.0",
     "gulp-clean-css": "^2.0.12",
@@ -31,7 +24,13 @@
     "gulp-ng-annotate": "^2.0.0",
     "gulp-sass": "^2.3.2",
     "gulp-uglify": "^2.0.0",
+    "jasmine-core": "^2.5.2",
     "jshint": "^2.9.3",
+    "karma": "^1.3.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-jasmine": "^1.0.2",
+    "phantomjs": "^2.1.7",
+    "phantomjs-prebuilt": "^2.1.12",
     "run-sequence": "^1.2.2",
     "vinyl-source-stream": "^1.1.0"
   },
@@ -40,7 +39,7 @@
     "url": "git+https://github.com/danielisaacgeslin/reservations.git"
   },
   "keywords": [
-    "dantools"
+    "reservations"
   ],
   "author": "dan",
   "license": "ISC",

@@ -17,10 +17,20 @@
     $scope.$watch(function(){return $state.current;}, _updateRoute);
 		$scope.$on('ERROR', _toastError);
 		$scope.$on('OK', _toastSuccess);
+		$scope.$on('goToLogin', _goToLogin);
+		$scope.$on('goToRoot', _goToRoot);
 
 		/*private functions*/
 		function _activate(){
 			_updateRoute();
+		}
+
+		function _goToLogin(){
+			$state.go('/login');
+		}
+
+		function _goToRoot(){
+			$state.go('/');
 		}
 
 		function _toastError(e,data){

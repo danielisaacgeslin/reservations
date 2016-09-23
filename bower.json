@@ -1,0 +1,34 @@
+{
+  "name": "reservations",
+  "description": "reservations",
+  "main": "gulpfile.js",
+  "authors": [
+    "dan"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "reservations"
+  ],
+  "homepage": "https://github.com/danielisaacgeslin/reservations",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular-mocks": "^1.5.8"
+  },
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-animate": "^1.5.8",
+    "angular-bootstrap": "^2.1.3",
+    "angular-material": "^1.1.1",
+    "angular-sanitize": "^1.5.8",
+    "angular-ui-bootstrap": "^2.1.3",
+    "angular-ui-router": "^0.3.1",
+    "font-awesome": "^4.6.3"
+  }
+}

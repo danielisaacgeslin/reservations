@@ -16,7 +16,7 @@ gulp.task('default', function(){
   runSequence('dev');
 });
 
-gulp.task('dev', ['build', 'lint', 'connect', 'watch']);
+gulp.task('dev', ['build', 'lint', 'watch']);
 
 gulp.task('build', function(){
   runSequence('build-main','libs','build-app','build-css','minify-html','images','fonts', 'lint');
