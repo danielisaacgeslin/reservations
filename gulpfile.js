@@ -10,13 +10,16 @@ var imagemin = require('gulp-imagemin');
 var connect = require('gulp-connect');
 var jshint = require('gulp-jshint');
 var runSequence = require('run-sequence');
+var Server = require('karma').Server;
 
 /*usable from terminal*/
 gulp.task('default', function(){
   runSequence('dev');
 });
 
-gulp.task('dev', ['build', 'lint', 'watch']);
+gulp.task('dev', function(){
+  runSequence('build', 'lint', 'test', 'watch');
+});
 
 gulp.task('build', function(){
   runSequence('build-main','libs','build-app','build-css','minify-html','images','fonts', 'lint');
@@ -32,9 +35,15 @@ gulp.task('connect', function() {
   });
 });
 
+gulp.task('test', function (done) {
+  new Server({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done).start();
+});
 
 gulp.task('lint', function() {
-  return gulp.src('./app/**/*.js')
+  return gulp.src(['./app/**/*.js','./test/**/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter('gulp-jshint-file-reporter', {
       filename: './jshint-output.log'
@@ -125,4 +134,5 @@ gulp.task('watch', function(){
 	gulp.watch('./sass/*.scss', [ 'build-css' ]);
 	gulp.watch('markup/**/*.html', ['minify-html']);
 	gulp.watch('images/**/*', ['images']);
+  gulp.watch(['app/**/*.js', 'test/**/*.js'], ['test', 'lint']);
 });

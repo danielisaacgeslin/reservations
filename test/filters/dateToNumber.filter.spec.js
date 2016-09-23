@@ -7,5 +7,4 @@ describe('filter: dateToNumber', function(){
     var date = new Date(now);
     expect($filter('dateToNumber')(date)).toBe(now);
   }));
-
 });
