@@ -5,6 +5,7 @@
   "main": "gulpfile.js",
   "scripts": {
     "start": "gulp dev",
+    "bower": "bower install",
     "pull": "git pull",
     "push": "git add * && git commit -m update && git push",
     "test": "karma start karma.conf.js"
