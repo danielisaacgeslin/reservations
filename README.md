@@ -2,11 +2,14 @@
 > A PHP and AngularJS system for apartment buildings
 
 ##Quick start
+
 ###Instalation
 * npm install
+
 ###Development
 * gulp lint
 * gulp dev
+
 ###Production
 * gulp build
 
