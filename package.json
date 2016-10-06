@@ -6,6 +6,7 @@
   "scripts": {
     "start": "gulp dev",
     "bower": "bower install",
+    "full-install": "npm install &&bower install",
     "pull": "git pull",
     "push": "git add * && git commit -m update && git push",
     "test": "karma start karma.conf.js"

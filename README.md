@@ -4,10 +4,10 @@
 ##Quick start
 
 ###Instalation
-* npm install
+* npm run full-install
 
 ###Development
-* gulp lint
+* gulp test
 * gulp dev
 
 ###Production
