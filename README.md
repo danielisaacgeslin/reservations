@@ -1,9 +1,9 @@
-A PHP and AngularJS reservations system for apartment buildings
+#A PHP and AngularJS reservations system for apartment buildings
 
-example: `<url>?route=getReservation&reservation_id=1`
+#Routes
+always as GET parameter "route". Example: `<url>?route=getReservation&reservation_id=1`
 
-#routes (always as GET parameter "route"):
-* GET
+###GET
 * ping -> `N/A`
 * getReservation -> `reservation_id(int)`
 * getReservationList -> `N/A`
@@ -11,7 +11,7 @@ example: `<url>?route=getReservation&reservation_id=1`
 * getComments -> `reservation_id(int)`
 * getTags -> `N/A`
 
-* POST
+###POST
 * saveReservation -> `title(string), description(string), body(string)`
 * updateReservation -> `reservation_id(int), title(string), description(string), body(string)`
 * deleteReservation -> `reservation_id(int)`
@@ -22,12 +22,12 @@ example: `<url>?route=getReservation&reservation_id=1`
 * updateComment -> `comment_id(int), comment(string)`
 * saveTag -> `tag(string)`
 
-#Instalation
+##Instalation
 * npm install
 
-#Development
+##Development
 * gulp lint
 * gulp dev
 
-#Production
+##Production
 * gulp build
