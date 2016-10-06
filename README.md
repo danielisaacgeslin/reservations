@@ -1,18 +1,17 @@
 #Reservations
 > A PHP and AngularJS system for apartment buildings
 
-##Instalation
+##Quick start
+###Instalation
 * npm install
-
-##Development
+###Development
 * gulp lint
 * gulp dev
-
-##Production
+###Production
 * gulp build
 
 ##Routes
-Always as GET parameter "route". Example: `<url>?route=getReservation&reservation_id=1`
+> Always as GET parameter "route". Example: `<url>?route=getReservation&reservation_id=1`
 
 ###GET
 * ping -> `N/A`
