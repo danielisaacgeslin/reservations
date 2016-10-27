@@ -4,7 +4,7 @@
 ##Quick start
 
 ###Instalation
-* npm run full-install
+* npm run install
 
 ###Development
 * gulp test
